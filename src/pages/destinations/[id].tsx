@@ -1,131 +1,294 @@
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { destinations, Destination } from '@/data/destinations';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BookingFlowModal from '@/components/BookingFlowModal';
-import BookingModal from '@/components/BookingModal';
-import { CheckCircle, Calendar, Briefcase } from 'lucide-react';
+import InclusionExclusionModal from '@/components/InclusionExclusionModal';
+import { Calendar, Zap, Users, Mountain, ArrowRight, Download, Check } from 'lucide-react';
 
-interface DestinationPageProps {
-  destination: Destination | null;
-}
+const StatCard = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) => (
+  <div className="flex items-center space-x-3">
+    <div className="text-orange-500">{icon}</div>
+    <div>
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="font-bold text-gray-800">{value}</p>
+    </div>
+  </div>
+);
 
-const DestinationPage = ({ destination }: DestinationPageProps) => {
+const PolicyLink = ({text, onClick}: {text: string, onClick?: () => void}) => (
+    <button onClick={onClick} className="flex justify-between items-center w-full text-left p-4 rounded-md hover:bg-gray-100 transition group">
+        <span className="font-semibold text-gray-700">{text}</span>
+        <ArrowRight size={20} className="text-gray-400 group-hover:text-orange-500 transition"/>
+    </button>
+);
+
+const DestinationPage = () => {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { id } = router.query;
+  
+  const [destination, setDestination] = useState<Destination | null>(null);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [isInclusionModalOpen, setIsInclusionModalOpen] = useState(false);
+  
+  // States for the interactive date filter
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [availableMonths, setAvailableMonths] = useState<string[]>([]);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+  const [filteredDates, setFilteredDates] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (id) {
+      const foundDestination = destinations.find(d => d.id === id);
+      setDestination(foundDestination || null);
+    }
+  }, [id]);
+
+  // This new effect runs after the destination has been set to select the first city.
+  useEffect(() => {
+    if (destination && destination.departureCities.length > 0) {
+      handleCitySelect(destination.departureCities[0].name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [destination]);
+
+  const handleMonthSelect = (cityName: string, monthName: string) => {
+    if (!destination) return;
+    setSelectedMonth(monthName);
+
+    const cityPackages = destination.packages.filter(p => p.departureCity === cityName);
+    const allDates = cityPackages.flatMap(p => p.availableDates);
+    const uniqueDates = [...new Set(allDates)];
+    const monthIndex = new Date(Date.parse(monthName + " 1, 2025")).getMonth();
+
+    const datesForMonth = uniqueDates
+      .filter(dateString => {
+        const startDateString = dateString.split(' - ')[0];
+        const date = new Date(startDateString + ", 2025");
+        return !isNaN(date.getTime()) && date.getMonth() === monthIndex;
+      })
+      .map(dateString => {
+        const startDatePart = dateString.split(' - ')[0];
+        return startDatePart.split(' ')[1];
+      });
+      
+    setFilteredDates(datesForMonth);
+
+    // Auto-select the first available date
+    if (datesForMonth.length > 0) {
+      setSelectedDate(datesForMonth[0]);
+    } else {
+      setSelectedDate(null);
+    }
+  };
+  
+  const handleCitySelect = (cityName: string) => {
+    if (!destination) return;
+    
+    setSelectedCity(cityName);
+    setFilteredDates([]); 
+    setSelectedDate(null);
+
+    const cityPackages = destination.packages.filter(p => p.departureCity === cityName);
+    const allDates = cityPackages.flatMap(p => p.availableDates);
+    const uniqueDates = [...new Set(allDates)];
+    
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const months = new Set<string>();
+    uniqueDates.forEach(dateString => {
+        const startDateString = dateString.split(' - ')[0];
+        const date = new Date(startDateString + ", 2025");
+        if (!isNaN(date.getTime())) {
+            months.add(monthNames[date.getMonth()]);
+        }
+    });
+    
+    const sortedMonths = monthNames.filter(m => months.has(m));
+    setAvailableMonths(sortedMonths);
+    
+    // Auto-select the first available month after a city is selected
+    if (sortedMonths.length > 0) {
+      handleMonthSelect(cityName, sortedMonths[0]);
+    } else {
+      setSelectedMonth(null);
+    }
+  };
 
   if (!destination) {
-    return <div>Destination not found</div>;
+    return <div>Loading or destination not found...</div>;
   }
+
+  const { keyStats } = destination;
 
   return (
     <>
-      <div className="flex flex-col min-h-screen bg-gray-50">
+      <div className="bg-[#f7f5f2]">
         <Head>
-          <title>{destination.name} - TravelBuddy</title>
+          <title>{`${destination.name} - TravelBuddy`}</title>
           <meta name="description" content={destination.shortDescription} />
         </Head>
         <Header />
 
-        <main className="flex-grow">
-          <div className="relative h-96">
-            <Image
-              src={destination.imageUrl}
-              alt={destination.name}
-              layout="fill"
-              objectFit="cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-              <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center drop-shadow-lg">
-                {destination.name}
-              </h1>
-            </div>
+        <main>
+          <div className="relative h-[60vh] w-full">
+            <Image src={destination.imageUrl} alt={destination.name} layout="fill" objectFit="cover" priority />
           </div>
 
-          <div className="container mx-auto px-6 py-12 max-w-4xl">
-            <div className="bg-white p-8 rounded-lg shadow-lg -mt-20 relative z-10">
-              <p className="text-lg text-gray-700 mb-6">{destination.longDescription}</p>
-
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
-                  <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md">
-                      <div className="flex items-center">
-                          <Calendar className="h-6 w-6 mr-3 flex-shrink-0"/>
-                          <div>
-                              <h3 className="font-bold">Best Time to Visit</h3>
-                              <p>{destination.bestTimeToVisit}</p>
-                          </div>
-                      </div>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative bg-white shadow-lg rounded-lg p-8 -mt-24">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div className="lg:col-span-2">
+                  <h1 className="text-4xl font-bold text-gray-900">{destination.name}</h1>
+                  <p className="text-lg text-gray-500 mt-1">{destination.subtitle}</p>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-8 border-t border-b py-6">
+                    <StatCard icon={<Calendar size={24} />} label="Duration" value={keyStats.duration} />
+                    <StatCard icon={<Zap size={24} />} label="Difficulty" value={keyStats.difficulty} />
+                    <StatCard icon={<Users size={24} />} label="Age Group" value={keyStats.ageGroup} />
+                    <StatCard icon={<Mountain size={24} />} label="Max Altitude" value={keyStats.maxAltitude} />
                   </div>
-                   <div className="bg-green-50 border-l-4 border-green-500 text-green-800 p-4 rounded-md">
-                      <div className="flex items-center">
-                          <Briefcase className="h-6 w-6 mr-3 flex-shrink-0"/>
-                          <div>
-                              <h3 className="font-bold">Category</h3>
-                              <p>{destination.category}</p>
-                          </div>
+
+                  {destination.importantUpdate && (
+                    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-8">
+                      <h4 className="font-bold">Important Update</h4>
+                      <p>{destination.importantUpdate}</p>
+                    </div>
+                  )}
+
+                  <h2 className="text-2xl font-bold mb-4">About</h2>
+                  <p className="text-gray-600 leading-relaxed mb-6">{destination.longDescription}</p>
+                  {destination.brochureUrl && (
+                    <a href={destination.brochureUrl} download className="inline-flex items-center px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition">
+                      <Download size={20} className="mr-2" /> Brochure
+                    </a>
+                  )}
+                </div>
+
+                <div className="lg:col-span-1">
+                  <div className="sticky top-24 bg-white p-6 rounded-lg shadow-md border">
+                    <p className="text-gray-500">Starts from</p>
+                    <p className="text-3xl font-bold text-gray-900">₹ {destination.basePrice.toLocaleString('en-IN')} / person</p>
+                    <div className="mt-4">
+                      <p className="font-semibold mb-2">Includes</p>
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                          <span className="flex items-center"><Check size={16} className="mr-1 text-green-500"/> Food</span>
+                          <span className="flex items-center"><Check size={16} className="mr-1 text-green-500"/> Travelling</span>
+                          <span className="flex items-center"><Check size={16} className="mr-1 text-green-500"/> Hotels</span>
+                          <span className="flex items-center"><Check size={16} className="mr-1 text-green-500"/> First Aid</span>
+                          <span className="flex items-center"><Check size={16} className="mr-1 text-green-500"/> GST</span>
                       </div>
+                    </div>
+                    <button onClick={() => setIsBookingModalOpen(true)} className="mt-6 w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition">
+                      Book Now
+                    </button>
                   </div>
+                </div>
               </div>
-
-
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">Things to Do</h2>
-              <ul className="space-y-3 mb-8">
-                {destination.thingsToDo.map((activity, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                    <span className="text-gray-700">{activity}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="text-center pt-6 border-t">
-                  <button 
-                    onClick={() => setIsModalOpen(true)}
-                    className="bg-blue-600 text-white font-bold py-4 px-8 rounded-lg text-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-300 shadow-lg"
-                  >
-                    Book Your Adventure Now
-                  </button>
-              </div>
-
             </div>
+
+            <div className="mt-16">
+              <h2 className="text-3xl font-bold text-center mb-8">Join us from</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {destination.departureCities.map(city => (
+                  <button key={city.name} onClick={() => handleCitySelect(city.name)} className={`p-4 rounded-lg text-left bg-white shadow-md hover:shadow-xl transition-all duration-300 border-2 ${selectedCity === city.name ? 'border-orange-500 scale-105' : 'border-transparent'}`}>
+                    <div className="relative h-40 rounded-lg overflow-hidden mb-4">
+                      <Image src={city.imageUrl} alt={city.name} layout="fill" objectFit="cover" />
+                    </div>
+                    <h3 className="text-xl font-bold">{city.name}</h3>
+                    <p className="text-gray-500">₹{city.price.toLocaleString('en-IN')}/-</p>
+                    <p className="text-sm text-gray-500">{city.duration}</p>
+                  </button>
+                ))}
+              </div>
+
+              {selectedCity && (
+                <div className="mt-8">
+                  <h3 className="text-xl font-semibold text-center mb-4">Dates from {selectedCity}</h3>
+                  <div className="flex justify-center flex-wrap gap-4">
+                    {availableMonths.map(month => (
+                       <button key={month} onClick={() => handleMonthSelect(selectedCity, month)} className={`px-6 py-2 font-semibold rounded-md text-sm transition-colors duration-300 ${selectedMonth === month ? 'bg-orange-500 text-white shadow-md' : 'bg-white text-gray-700 border hover:bg-orange-100'}`}>
+                         {month}
+                       </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedMonth && (
+                 <div className="mt-8 bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+                    <h4 className="font-bold text-center mb-4">Available Dates for {selectedMonth}</h4>
+                    {filteredDates.length > 0 ? (
+                      <div className="flex flex-wrap justify-center gap-4">
+                          {filteredDates.map((day, index) => (
+                              <button 
+                                  key={index} 
+                                  onClick={() => setSelectedDate(day)}
+                                  className={`h-12 w-12 flex items-center justify-center rounded-full border-2 font-bold transition-colors duration-200 ${selectedDate === day ? 'bg-orange-500 text-white border-orange-500' : 'border-orange-300 text-orange-500 hover:bg-orange-100'}`}
+                              >
+                                  {day}
+                              </button>
+                          ))}
+                      </div>
+                    ) : (
+                      <p className="text-center text-gray-500">No dates available for {selectedMonth}.</p>
+                    )}
+                 </div>
+              )}
+            </div>
+
+
+            <div className="mt-16">
+              <h2 className="text-3xl font-bold text-center mb-12">Schedule</h2>
+              <div className="relative border-l-2 border-orange-200 ml-4">
+                  {destination.itinerary.map((day, index) => (
+                      <div key={index} className="mb-12 pl-12">
+                          <div className="absolute -left-[11px] top-1 h-5 w-5 rounded-full bg-orange-500 border-4 border-white"></div>
+                          <p className="text-sm font-semibold text-orange-500">DAY {day.day} - {day.date}</p>
+                          <h3 className="text-2xl font-bold mt-1">{day.title}</h3>
+                          <p className="text-gray-600 mt-2">{day.description} <a href="#" className="text-orange-500 font-semibold">Know more</a></p>
+                          <Image src={day.imageUrl} alt={day.title} width={800} height={500} className="rounded-lg mt-4 shadow-md"/>
+                      </div>
+                  ))}
+              </div>
+            </div>
+
+            <div className="mt-16">
+              <h2 className="text-3xl font-bold text-center mb-8">Attractions</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {destination.attractions.map(attraction => (
+                  <div key={attraction.name} className="relative rounded-lg overflow-hidden group">
+                      <Image src={attraction.imageUrl} alt={attraction.name} width={500} height={400} objectFit="cover" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                      <p className="absolute bottom-4 left-4 text-white text-xl font-bold">{attraction.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-16 bg-white shadow-lg rounded-lg p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <PolicyLink text="Inclusion & Exclusion" onClick={() => setIsInclusionModalOpen(true)}/>
+                    <PolicyLink text="Things to Carry" />
+                    <PolicyLink text="Terms & Conditions" />
+                    <PolicyLink text="Cancellation Policy" />
+                    <PolicyLink text="Request a Call Back!" />
+                </div>
+            </div>
+
           </div>
         </main>
-
         <Footer />
       </div>
 
-      {isModalOpen && destination && (
-        <BookingFlowModal
-          destination={destination}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+      {isBookingModalOpen && destination && <BookingFlowModal destination={destination} onClose={() => setIsBookingModalOpen(false)} />}
+      {isInclusionModalOpen && <InclusionExclusionModal inclusions={destination.inclusions} exclusions={destination.exclusions} onClose={() => setIsInclusionModalOpen(false)} />}
     </>
   );
-};
-
-export const getStaticPaths = async () => {
-  const paths = destinations.map(destination => ({
-    params: { id: destination.id },
-  }));
-  return { paths, fallback: false };
-};
-
-export const getStaticProps = async ({ params }: { params?: { id?: string } }) => {
-  const destination = destinations.find(d => d.id === params?.id);
-  return {
-    props: {
-      destination: destination || null,
-    },
-  };
 };
 
 export default DestinationPage;

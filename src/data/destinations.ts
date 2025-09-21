@@ -1,59 +1,108 @@
-// Define the structure for a travel package
-export interface TravelPackage {
-  id: string;
-  name: string;
-  price: number;
-  duration: string;
-  departureCity: 'Ahmedabad' | 'Kochi' | 'Mumbai' | 'Baroda/Surat';
-  availableDates: string[];
+import { Calendar, Cloud, Mountain, Users, Zap } from 'lucide-react';
+
+// --- NEW DETAILED DATA STRUCTURE ---
+
+export interface ItineraryDay {
+day: number;
+date: string;
+title: string;
+description: string;
+imageUrl: string;
 }
 
-// Update the Destination type to include packages AND the original availableDates
+export interface DepartureCity {
+    name: string;
+    imageUrl: string;
+    price: number;
+    duration: string;
+}
+
+export interface TravelPackage {
+id: string;
+name: string;
+price: number;
+duration: string;
+departureCity: 'Ahmedabad' | 'Kochi' | 'Mumbai' | 'Baroda/Surat';
+availableDates: string[];
+}
+
 export interface Destination {
-  id: string;
-  name: string;
-  shortDescription: string;
-  longDescription: string;
-  imageUrl: string;
-  category: 'Mountain' | 'Beach' | 'Historical' | 'City';
-  bestTimeToVisit: string;
-  thingsToDo: string[];
-  availableDates: string[]; // This has been added back
-  packages: TravelPackage[]; 
+id: string;
+name: string;
+subtitle: string;
+shortDescription: string;
+longDescription: string;
+imageUrl: string;
+category: 'Mountain' | 'Beach' | 'Historical' | 'City';
+bestTimeToVisit: string;
+thingsToDo: string[];
+availableDates: string[];
+packages: TravelPackage[];
+
+// New fields for the redesigned UI
+keyStats: {
+    duration: string;
+    difficulty: 'Easy' | 'Moderate' | 'Hard';
+    ageGroup: string;
+    maxAltitude: string;
+};
+importantUpdate: string;
+brochureUrl?: string; // Optional brochure link
+inclusions: string[];
+exclusions: string[];
+itinerary: ItineraryDay[];
+attractions: { name: string, imageUrl: string }[];
+departureCities: DepartureCity[];
+basePrice: number;
 }
 
 export const destinations: Destination[] = [
-  {
+{
     id: '1',
-    name: 'Manali',
-    shortDescription: 'A Himalayan resort town famed for its adventure sports.',
-    longDescription: 'Nestled in the mountains of the Indian state of Himachal Pradesh, Manali is a high-altitude Himalayan resort town...',
-    imageUrl: 'https://images.unsplash.com/photo-1586622992373-69411786178d?q=80&w=2070&auto=format&fit=crop',
-    category: 'Mountain',
-    bestTimeToVisit: 'October to June',
-    thingsToDo: ['Solang Valley Skiing', 'Trekking in Parvati Valley', 'Visit Hadimba Temple', 'River Rafting in Beas'],
-    availableDates: ['Oct 5-12, 2025', 'Nov 15-22, 2025', 'Oct 10-17, 2025', 'Nov 20-27, 2025'], // General dates
-    packages: [
-        { id: 'm1', name: 'AC Sleeper Train to Manali', price: 15500, duration: '7 days / 6 nights', departureCity: 'Mumbai', availableDates: ['Oct 5-12, 2025', 'Nov 15-22, 2025']},
-        { id: 'm2', name: 'Non AC Sleeper Train to Manali', price: 12800, duration: '7 days / 6 nights', departureCity: 'Mumbai', availableDates: ['Oct 5-12, 2025', 'Nov 15-22, 2025']},
-        { id: 'm3', name: 'AC Bus from Ahmedabad', price: 13500, duration: '8 days / 7 nights', departureCity: 'Ahmedabad', availableDates: ['Oct 10-17, 2025', 'Nov 20-27, 2025']}
-    ]
-  },
-  {
-    id: '2',
-    name: 'Goa',
-    shortDescription: 'Famous for its beaches, nightlife, and Portuguese culture.',
-    longDescription: 'Goa is a state in western India with coastlines stretching along the Arabian Sea...',
-    imageUrl: 'https://images.unsplash.com/photo-1560179407-9f0b83ba8b39?q=80&w=2070&auto=format&fit=crop',
+    name: 'Kerala Calling',
+    subtitle: 'Venice of the East!',
+    shortDescription: 'A symphony of emerald-green hills, spice-scented forests, and tranquil backwaters.',
+    longDescription: 'Kerala, famously known as God’s Own Country, is a symphony of emerald-green hills, spice-scented forests, tranquil lakes, and soulful coastal towns. This journey is a handpicked experience that captures the essence of Kerala — from heritage walks in Fort Kochi to tea-covered slopes of Munnar, the wild heart of Thekkady, and the backwater charm of Alleppey.',
+    imageUrl: 'https://images.unsplash.com/photo-1602216056096-3b4046249219?q=80&w=2532&auto=format&fit=crop',
     category: 'Beach',
-    bestTimeToVisit: 'November to February',
-    thingsToDo: ['Relax at Baga Beach', 'Explore Old Goa Churches', 'Dudhsagar Falls', 'Anjuna Flea Market'],
-    availableDates: ['Nov 10-15, 2025', 'Dec 20-25, 2025', 'Nov 12-17, 2025', 'Dec 22-27, 2025'], // General dates
+    bestTimeToVisit: 'September to March',
+    thingsToDo: ['Backwater Houseboat Cruise', 'Tea Plantation Visit in Munnar', 'Kathakali Performance', 'Explore Fort Kochi'],
+    availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025', 'Oct 10 - Oct 17, 2025', 'Oct 31 - Nov 7, 2025', 'Nov 7 - Nov 14, 2025', 'Dec 5 - Dec 12, 2025'],
     packages: [
-        { id: 'g1', name: 'Flight Package from Mumbai', price: 18000, duration: '5 days / 4 nights', departureCity: 'Mumbai', availableDates: ['Nov 10-15, 2025', 'Dec 20-25, 2025']},
-        { id: 'g2', name: 'AC Sleeper Train from Ahmedabad', price: 14000, duration: '6 days / 5 nights', departureCity: 'Ahmedabad', availableDates: ['Nov 12-17, 2025', 'Dec 22-27, 2025']}
-    ]
-  },
-  // ... add more destinations with packages as needed
+    { id: 'k1', name: 'Non AC Sleeper Train to Kochi', price: 11800, duration: '8 days / 7 nights', departureCity: 'Ahmedabad', availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025']},
+    { id: 'k2', name: 'AC Sleeper Train to Kochi', price: 14400, duration: '8 days / 7 nights', departureCity: 'Ahmedabad', availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025']},
+    { id: 'k3', name: 'Non AC Sleeper Train via Mumbai', price: 12000, duration: '8 days / 7 nights', departureCity: 'Mumbai', availableDates: ['Oct 10 - Oct 17, 2025', 'Dec 5 - Dec 12, 2025']},
+    { id: 'k4', name: 'AC Sleeper Train via Mumbai', price: 15900, duration: '8 days / 7 nights', departureCity: 'Mumbai', availableDates: ['Oct 10 - Oct 17, 2025', 'Dec 5 - Dec 12, 2025']},
+    { id: 'k5', name: 'From Kochi', price: 9999, duration: '6 days / 5 nights', departureCity: 'Kochi', availableDates: ['Nov 7 - Nov 14, 2025']},
+    { id: 'k6', name: 'From Baroda/Surat', price: 11800, duration: '8 days / 7 nights', departureCity: 'Baroda/Surat', availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 31 - Nov 7, 2025', 'Dec 5 - Dec 12, 2025']}
+    ],
+    keyStats: {
+    duration: '6 days / 5 nights',
+    difficulty: 'Easy',
+    ageGroup: '8-40 years',
+    maxAltitude: '6,100 ft'
+    },
+    importantUpdate: 'For Flight Ticket Booking, Kindly WhatsApp on 9091680699.',
+    brochureUrl: '#',
+    inclusions: ['Traveling as per package', 'Food (Breakfast & Dinner)', 'Stay in Hotel in 3/4 sharing basis', '5% GST', 'First Aid Support', 'And Much more..'],
+    exclusions: ['Food during travel duration & Lunch', 'Sightseeing Entry Fees if any', 'Anything not listed above'],
+    itinerary: [
+    { day: 1, date: 'SEP 27, 2025', title: 'Arrive in Kochi - Free Day for Sightseeing', description: 'Explore Fort Kochi\'s colonial charm, Chinese Fishing Nets, and local spice markets.', imageUrl: 'https://images.unsplash.com/photo-1593651031213-7b3da2b8a145?q=80&w=2574&auto=format&fit=crop' },
+    { day: 6, date: 'OCT 02, 2025', title: 'Disperse from Kochi', description: 'Disperse after Breakfast.', imageUrl: 'https://images.unsplash.com/photo-1624555130581-351a0218b060?q=80&w=2574&auto=format&fit=crop' }
+    ],
+    attractions: [
+    { name: 'Kochi', imageUrl: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7207?q=80&w=2574&auto=format&fit=crop' },
+    { name: 'Backwaters', imageUrl: 'https://images.unsplash.com/photo-1593693397640-052a21e4a3c0?q=80&w=2574&auto=format&fit=crop' },
+    { name: 'Munnar', imageUrl: 'https://images.unsplash.com/photo-1549923028-595a6332c21c?q=80&w=2574&auto=format&fit=crop' }
+    ],
+    departureCities: [
+        { name: 'Ahmedabad', imageUrl: 'https://images.unsplash.com/photo-1582209539513-4a1b24c30b2c?q=80&w=2532&auto=format&fit=crop', price: 11800, duration: '8 days'},
+        { name: 'Kochi', imageUrl: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7207?q=80&w=2574&auto=format&fit=crop', price: 9999, duration: '6 days'},
+        { name: 'Mumbai', imageUrl: 'https://images.unsplash.com/photo-1562979314-1ace75b05474?q=80&w=2574&auto=format&fit=crop', price: 11400, duration: '8 days'},
+        { name: 'Baroda/Surat', imageUrl: 'https://images.unsplash.com/photo-1622303273200-2e4532a81878?q=80&w=2574&auto=format&fit=crop', price: 11800, duration: '8 days'}
+    ],
+    basePrice: 9999
+},
+// Add other destinations here with the same detailed structure
 ];
 

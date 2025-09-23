@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 
 
 export default function Home() {
-  const popularDestinations = destinations.slice(0, 3);
+  const popularDestinations = destinations.slice(0, 7); // Show only the first 7 destinations for brevity
   
   const [currentIndex, setCurrentIndex] = useState(0);
 

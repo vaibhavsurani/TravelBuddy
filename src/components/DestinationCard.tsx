@@ -10,22 +10,18 @@ interface DestinationCardProps {
 
 const DestinationCard: React.FC<DestinationCardProps> = ({ destination }) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
-      <div className="relative h-56 w-full">
-        <Image
-          src={destination.imageUrl}
-          alt={destination.name}
-          layout="fill"
-          objectFit="cover"
-        />
-      </div>
-      <div className="p-6 text-left">
-        <h3 className="text-xl font-bold text-gray-800 mb-2">{destination.name}</h3>
-        <p className="text-gray-600 mb-4">{destination.shortDescription}</p>
-        <Link href={`/destinations/${destination.id}`} className="inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
-            View Details
-        </Link>
-      </div>
+    <div className="bg-white rounded-xl shadow-lg h-90 w-52 overflow-hidden transform hover:shadow-2xl transition-transform duration-300">
+      <Link href={`/destinations/${destination.id}`} className="">
+        <div className="relative h-90 w-52">
+          <Image
+            src={destination.imageUrl}
+            alt={destination.name}
+            layout="fill"
+            objectFit="cover"
+          />
+          <h3 className="text-xl font-bold text-gray-800 mb-2">{destination.name}</h3>
+        </div>
+      </Link>
     </div>
   );
 };

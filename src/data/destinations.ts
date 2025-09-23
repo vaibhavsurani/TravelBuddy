@@ -22,7 +22,7 @@ export interface TravelPackage {
   name: string;
   price: number;
   duration: string;
-  departureCity: 'Ahmedabad' | 'Kochi' | 'Mumbai' | 'Baroda/Surat';
+  departureCity: 'Ahmedabad' | 'Kochi' | 'Mumbai' | 'Baroda/Surat' | 'Polo Forest';
   availableDates: string[];
   itinerary: ItineraryDay[]; // <-- Separate itinerary per package
 }
@@ -35,7 +35,7 @@ export interface Destination {
   shortDescription: string;
   longDescription: string;
   carouselImages: { src: string; alt: string }[];
-  category: 'Mountain' | 'Beach' | 'Historical' | 'City';
+  category: 'Mountain' | 'Beach' | 'Historical' | 'City' | 'Trekking';
   bestTimeToVisit: string;
   availableDates: string[];
   packages: TravelPackage[];
@@ -401,5 +401,116 @@ export const destinations: Destination[] = [
     ],
     basePrice: 9999,
   },
+
+  {
+  id: 'polo-forest',
+  name: 'Polo Forest',
+  imageUrl: '/images/PoloForest/poloforestHome.jpg',
+  subtitle: "Gujarat's Hidden Paradise!",
+  shortDescription: 'A serene blend of ancient temples, lush greenery, and adventure-filled experiences.',
+  longDescription: 'Polo Forest, also known as Vijaynagar Forest, is nestled in the foothills of the Aravalli range in North Gujarat. This destination is a treasure trove of nature, history, and adventure. It offers a perfect weekend escape with its dense forests, ancient temple ruins, and the perennial Harnav River. This journey is designed to let you experience guided treks, exciting adventure activities, and the tranquility of a night under the stars.',
+  carouselImages: [{
+      src: '/images/PoloForest/poloforest1.jpg',
+      alt: 'Ancient temple ruins in Polo Forest'
+    }, {
+      src: '/images/PoloForest/poloforest2.jpg',
+      alt: 'A group trekking through the lush greenery of Polo Forest'
+    }, {
+      src: '/images/PoloForest/poloforest3.jpg',
+      alt: 'Harnav River flowing through the forest'
+    }, {
+      src: '/images/PoloForest/poloforest4.jpg',
+      alt: 'A group enjoying a bonfire at a campsite'
+    },{
+      src: '/images/PoloForest/poloforest5.jpg',
+      alt: 'Ancient temple ruins in Polo Forest'
+    }, {
+      src: '/images/PoloForest/poloforest6.jpg',
+      alt: 'A group trekking through the lush greenery of Polo Forest'
+    }],
+  category: 'Trekking',
+  bestTimeToVisit: 'September to February (Monsoon & Winter)',
+  availableDates: ['Sep 27 - Sep 28, 2025', 'Oct 4 - Oct 5, 2025', 'Oct 11 - Oct 12, 2025', 'Oct 18 - Oct 19, 2025', 'Oct 25 - Oct 26, 2025', 'Nov 1 - Nov 2, 2025', 'Nov 8 - Nov 9, 2025', 'Nov 15 - Nov 16, 2025', 'Dec 6 - Dec 7, 2025'],
+  packages: [{
+      id: 'p1',
+      destinationId: 'polo-forest',
+      name: 'From Ahmedabad',
+      price: 2000,
+      duration: '2 days / 1 night',
+      departureCity: 'Ahmedabad',
+      availableDates: ['Sep 27 - Sep 28, 2025', 'Oct 4 - Oct 5, 2025', 'Oct 11 - Oct 12, 2025'],
+      itinerary: [{
+          day: 1,
+          title: 'Departure & Forest Trek',
+          description: 'Depart from Ahmedabad early morning. Arrive at Polo Forest and check in. Enjoy a guided trek through the forest to ancient temple ruins and explore the Harnav River.',
+          imageUrl: '/images/PoloForest/poloforestday1.jpg'
+        }, {
+          day: 2,
+          title: 'Adventure Activities & Return',
+          description: 'Morning adventure activities like rappelling or rock climbing (subject to weather). After lunch, depart for Ahmedabad, arriving in the evening.',
+          imageUrl: '/images/PoloForest/poloforestday2.jpg'
+        }]
+    }, {
+      id: 'p2',
+      destinationId: 'polo-forest',
+      name: 'Polo to Polo (Own Vehicle)',
+      price: 1799,
+      duration: '2 days / 1 night',
+      departureCity: 'Polo Forest',
+      availableDates: ['Nov 1 - Nov 2, 2025', 'Nov 8 - Nov 9, 2025', 'Nov 15 - Nov 16, 2025'],
+      itinerary: [{
+          day: 1,
+          title: 'Arrival at Polo Forest & Campfire',
+          description: 'Arrive at the campsite in the afternoon. Check-in and relax before a guided trek. Enjoy a campfire with music and group activities in the evening.',
+          imageUrl: '/images/PoloForest/poloforestday1.jpg'
+        }, {
+          day: 2,
+          title: 'Trekking & Departure',
+          description: 'Early morning trek to Sunrise Point and Vireshwar temple. Return for breakfast and adventure activities before check-out and departure.',
+          imageUrl: '/images/PoloForest/poloforestday2.jpg'
+        }]
+    }],
+  keyStats: {
+    duration: '2 days / 1 night',
+    difficulty: 'Easy',
+    ageGroup: '6-40 years',
+    maxAltitude: '600 ft'
+  },
+  importantUpdate: 'For more information on customized camps or special batches, please contact us directly.',
+  brochureUrl: '#',
+  inclusions: ['Traveling as per package', 'Food (Breakfast & Dinner)', 'Accommodation in Tents/Rooms (as per package)', 'Forest Trekking & Site Seeing', 'Adventure Activities (Rappelling, Rock Climbing)', 'First Aid Support'],
+  exclusions: ['Personal expenses', 'Food during travel duration & Lunch', 'Sightseeing Entry Fees if any', 'Anything not listed in inclusions'],
+  attractions: [{
+      name: 'Sharneshwar Temple',
+      imageUrl: '/images/PoloForest/poloforestA1.jpg'
+    }, {
+      name: 'Harnav River & Dam',
+      imageUrl: '/images/PoloForest/poloforestA2.jpg'
+    }, {
+      name: "Lakhera's Dera (Jain Temple)",
+      imageUrl: '/images/PoloForest/poloforestA3.jpg'
+    },{
+      name: 'Sharneshwar Temple',
+      imageUrl: '/images/PoloForest/poloforestA4.jpg'
+    }, {
+      name: 'Harnav River & Dam',
+      imageUrl: '/images/PoloForest/poloforestA5.jpg'
+    }, {
+      name: "Lakhera's Dera (Jain Temple)",
+      imageUrl: '/images/PoloForest/poloforestA6.jpg'
+    }],
+  departureCities: [{
+      name: 'Ahmedabad',
+      imageUrl: '/images/PoloForest/dAhmedabad.jpg',
+      price: 2000,
+      duration: '2 days'
+    }, {
+      name: 'Polo Forest',
+      imageUrl: '/images/PoloForest/dPoloForest.jpg',
+      price: 1799,
+      duration: '2 days'
+    }],
+  basePrice: 1799
+}
 ];
 

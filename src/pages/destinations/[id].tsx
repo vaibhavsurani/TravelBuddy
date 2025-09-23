@@ -407,13 +407,25 @@ const DestinationPage = () => {
 
             {/* ATTRACTIONS */}
             <div className="bg-gray-50 px-6 py-4">
-              <h2 className="text-2xl font-normal text-[#C2461C] mb-8">Attractions</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <h2 className="text-2xl font-normal text-[#C2461C] mb-3">Attractions</h2>
+              
+              {/* 1. Main container changed to a flexbox with horizontal scrolling */}
+              <div className="flex overflow-x-auto gap-6"> 
                 {destination.attractions.map((attraction) => (
-                  <div key={attraction.name} className="relative rounded-lg overflow-hidden group">
-                    <Image src={attraction.imageUrl} alt={attraction.name} width={150} height={100} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <p className="absolute bottom-4 left-4 text-white text-lg font-bold">{attraction.name}</p>
+                  
+                  // 2. Each attraction card is prevented from shrinking and given a fixed width
+                  <div key={attraction.name} className="flex-shrink-0 w-64"> 
+                    <Image 
+                      src={attraction.imageUrl} 
+                      alt={attraction.name} 
+                      width={400} 
+                      height={300}
+                      // 3. Image is styled to be rounded and fit its container
+                      className="rounded-2xl h-40 w-full object-cover" 
+                    />
+                    
+                    {/* 4. Text is now a simple paragraph below the image */}
+                    <p className="mt-2 text-gray-800">{attraction.name}</p>
                   </div>
                 ))}
               </div>

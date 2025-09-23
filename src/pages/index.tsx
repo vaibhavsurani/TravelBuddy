@@ -75,22 +75,22 @@ export default function Home() {
 
         {/* Popular Destinations Section */}
         <section className="bg-gray-50 py-16 max-w-6xl w-full mx-auto -mt-24">
-  <div className="container mx-auto px-6">
-    <div className="text-left">
-      <h2 className="text-2xl font-normal text-[#C2461C]">Highlighted Events</h2>
-      <h2 className="text-lg font-normal text-gray-500 mb-4">Recommended camps by our Instructors</h2>
-    </div>
+          <div className="container mx-auto px-6">
+            <div className="text-left">
+              <h2 className="text-2xl font-normal text-[#C2461C]">Highlighted Events</h2>
+              <h2 className="text-lg font-normal text-gray-500 mb-4">Recommended camps by our Instructors</h2>
+            </div>
 
-    {/* CORRECTED: Using a smaller number (2) to reduce the gap. */}
-    <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide space-x-2">
-      {popularDestinations.map((destination) => (
-        <div key={destination.id} className="flex-shrink-0 w-52">
-          <DestinationCard destination={destination} />
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+            {/* CORRECTED: Using a smaller number (2) to reduce the gap. */}
+            <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide space-x-2">
+              {popularDestinations.map((destination) => (
+                <div key={destination.id} className="flex-shrink-0 w-52">
+                  <DestinationCard destination={destination} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />

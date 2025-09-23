@@ -33,13 +33,21 @@ export default function Home() {
           </section>
 
           {/* Popular Destinations Section */}
-          <section className="py-16">
-            <div className="container mx-auto px-6 text-center">
-              <h2 className="text-3xl font-bold text-gray-800 mb-12">Popular Destinations</h2>
-              {/* THIS IS THE PART THAT WAS MISSING */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <section className="bg-gray-50 py-16">
+            <div className="container mx-auto px-6"> {/* Removed text-center from the main container */}
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-gray-800 mb-12">Popular Destinations</h2>
+              </div>
+
+              {/* 1. Changed from 'grid' to 'flex' for horizontal layout */}
+              <div className="flex overflow-x-auto gap-8 pb-4 scrollbar-hide">
                 {popularDestinations.map((destination) => (
-                  <DestinationCard key={destination.id} destination={destination} />
+                  
+                  // 2. Added a wrapper to control the size of each card in the slider
+                  <div key={destination.id} className="flex-shrink-0 w-80"> 
+                    <DestinationCard destination={destination} />
+                  </div>
+
                 ))}
               </div>
             </div>

@@ -30,6 +30,7 @@ export interface TravelPackage {
 export interface Destination {
   id: string;
   name: string;
+  imageUrl: string;
   subtitle: string;
   shortDescription: string;
   longDescription: string;
@@ -60,6 +61,7 @@ export const destinations: Destination[] = [
   {
     id: 'kerala',
     name: 'Kerala Calling',
+    imageUrl: '/images/KeralaHome.jpg',
     subtitle: 'Venice of the East!',
     shortDescription:
       'A symphony of emerald-green hills, spice-scented forests, and tranquil backwaters.',

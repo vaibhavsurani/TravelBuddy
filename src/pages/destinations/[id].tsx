@@ -213,7 +213,7 @@ const DestinationPage = () => {
           </div>
 
           {/* MAIN CONTENT WRAPPER (Constrained to center) */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
             {/* DETAILS CARD */}
             <div className="relative bg-white shadow-lg rounded-lg p-8 -mt-24">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

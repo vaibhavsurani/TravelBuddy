@@ -17,10 +17,10 @@ import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 
 const StatCard = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) => (
   <div className="flex items-center space-x-3">
-    <div className="text-orange-500">{icon}</div>
+    <div className="text-[#C2461C]">{icon}</div>
     <div>
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="font-bold text-gray-800">{value}</p>
+      <p className="text-xs text-gray-500">{label}</p>
+      <p className="font-bold text-gray-800 text-sm">{value}</p>
     </div>
   </div>
 );
@@ -30,8 +30,8 @@ const PolicyLink = ({ text, onClick }: { text: string; onClick?: () => void }) =
     onClick={onClick}
     className="flex justify-between items-center w-full text-left p-4 rounded-md hover:bg-gray-100 transition group"
   >
-    <span className="font-semibold text-gray-700">{text}</span>
-    <ArrowRight size={20} className="text-gray-400 group-hover:text-orange-500 transition" />
+    <span className="font-semibold text-gray-700 text-sm">{text}</span>
+    <ArrowRight size={20} className="text-gray-400 group-hover:text-[#C2461C] transition" />
   </button>
 );
 
@@ -130,7 +130,7 @@ const DestinationPage = () => {
   };
 
   if (!destination) {
-    return <div>Loading or destination not found...</div>;
+    return <div className="text-sm">Loading or destination not found...</div>;
   }
 
   const { keyStats } = destination;
@@ -174,25 +174,24 @@ const DestinationPage = () => {
   return (
     <>
       <div className="bg-[#f7f5f2]">
-        <Header />
+        
         <Head>
           <title>{`${destination.name} - TravelBuddy`}</title>
           <meta name="description" content={destination.shortDescription} />
         </Head>
-           
+        
         <main>
           {/* HERO SECTION (Full-width) */}
-          <div className="relative h-[60vh] w-full">
+          <Header />
+          <div className="relative h-[60vh] w-full -top-15">
             <Swiper
               modules={[Autoplay, Pagination, Navigation]}
               spaceBetween={0}
               slidesPerView={1}
-              // 1. Set loop to false to stop it from restarting
               loop={false}
               autoplay={{
                 delay: 1500,
                 disableOnInteraction: false,
-                // 2. Add this line to pause when the user hovers over it
                 pauseOnMouseEnter: true,
               }}
               pagination={{ clickable: true }}
@@ -220,10 +219,10 @@ const DestinationPage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left Column */}
                 <div className="lg:col-span-2">
-                  <h1 className="text-4xl font-bold text-gray-900">{destination.name}</h1>
-                  <p className="text-lg text-gray-500 mt-1">{destination.subtitle}</p>
+                  <h1 className="text-2xl font-md text-[#C2461C]">{destination.name}</h1>
+                  <p className="text-base text-gray-500 mt-1">{destination.subtitle}</p>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-8 border-t border-b py-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4 mt-8 text-gray-300 border-b pb-6">
                     <StatCard icon={<Calendar size={24} />} label="Duration" value={keyStats.duration} />
                     <StatCard icon={<Zap size={24} />} label="Difficulty" value={keyStats.difficulty} />
                     <StatCard icon={<Users size={24} />} label="Age Group" value={keyStats.ageGroup} />
@@ -231,19 +230,19 @@ const DestinationPage = () => {
                   </div>
 
                   {destination.importantUpdate && (
-                    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-8">
-                      <h4 className="font-bold">Important Update</h4>
-                      <p>{destination.importantUpdate}</p>
+                    <div className="bg-red-100  border-red-500 text-gray-700 p-4 rounded-md mb-6">
+                      <h4 className="font-md text-base">Important Update</h4>
+                      <p className="text-sm">{destination.importantUpdate}</p>
                     </div>
                   )}
 
-                  <h2 className="text-2xl font-bold mb-4">About</h2>
-                  <p className="text-gray-600 leading-relaxed mb-6">{destination.longDescription}</p>
+                  <h2 className="text-lg text-gray-700 font-md mb-1">About</h2>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-6">{destination.longDescription}</p>
                   {destination.brochureUrl && (
                     <a
                       href={destination.brochureUrl}
                       download
-                      className="inline-flex items-center px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition"
+                      className="inline-flex items-center px-2 py-1.5 text-[#C2461C] border border-[#C2461C] rounded-md hover:bg-[#C2461C] hover:text-white transition text-sm"
                     >
                       <Download size={20} className="mr-2" /> Brochure
                     </a>
@@ -252,14 +251,14 @@ const DestinationPage = () => {
 
                 {/* Right Column (Booking) */}
                 <div className="lg:col-span-1">
-                  <div className="sticky top-24 bg-white p-6 rounded-lg shadow-md border">
-                    <p className="text-gray-500">Starts from</p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      ₹ {destination.basePrice.toLocaleString('en-IN')} / person
+                  <div className="sticky top-24 bg-white p-6 rounded-xl rounded-md shadow-md border border-gray-200">
+                    <p className="text-sm text-gray-500">Starts from</p>
+                    <p className="text-2xl font-md text-gray-900">
+                      ₹ {destination.basePrice.toLocaleString('en-IN')} <span className="font-extralight text-sm text-gray-900">/ person</span>
                     </p>
                     <div className="mt-4">
-                      <p className="font-semibold mb-2">Includes</p>
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                      <p className="font-semibold mb-2 text-sm">Includes</p>
+                      <div className="flex flex-wrap gap-4 text-xs text-gray-600">
                         <span className="flex items-center"><Check size={16} className="mr-1 text-green-500" /> Food</span>
                         <span className="flex items-center"><Check size={16} className="mr-1 text-green-500" /> Travelling</span>
                         <span className="flex items-center"><Check size={16} className="mr-1 text-green-500" /> Hotels</span>
@@ -269,7 +268,7 @@ const DestinationPage = () => {
                     </div>
                     <button
                       onClick={() => setIsBookingModalOpen(true)}
-                      className="mt-6 w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition"
+                      className="mt-6 w-full bg-[#C2461C] text-white font-bold py-3 rounded-2xl hover:bg-orange-600 transition text-sm"
                     >
                       Book Now
                     </button>
@@ -279,121 +278,142 @@ const DestinationPage = () => {
             </div>
 
             {/* CITY SELECTOR */}
-            <div className="mt-16">
-              <h2 className="text-3xl font-bold text-center mb-8">Join us from</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {destination.departureCities.map((city) => (
-                  <button
-                    key={city.name}
-                    onClick={() => handleCitySelect(city.name)}
-                    className={`p-4 rounded-lg text-left bg-white shadow-md hover:shadow-xl transition-all duration-300 border-2 ${
-                      selectedCity === city.name ? 'border-orange-500 scale-105' : 'border-transparent'
-                    }`}
-                  >
-                    <div className="relative h-40 rounded-lg overflow-hidden mb-4">
-                      <Image src={city.imageUrl} alt={city.name} layout="fill" objectFit="cover" />
-                    </div>
-                    <h3 className="text-xl font-bold">{city.name}</h3>
-                    <p className="text-gray-500">₹{city.price.toLocaleString('en-IN')}/-</p>
-                    <p className="text-sm text-gray-500">{city.duration}</p>
-                  </button>
-                ))}
+            <div className="mt-4 px-6">
+              <div className="">
+                <h2 className="text-2xl w-full text-left font-normal text-[#C2461C] text-center">Join us from</h2>
+                
+                {/* MODIFICATION 1: 
+                  - Replaced 'grid' with 'flex' to lay out items in a row.
+                  - Added 'overflow-x-auto' to enable horizontal scrolling.
+                  - Added 'pb-4' to give some space for the scrollbar.
+                */}
+                <div className="flex overflow-x-auto gap-6 pb-4 pt-4 pr-2">
+                  {destination.departureCities.map((city) => (
+                    <button
+                      key={city.name}
+                      onClick={() => handleCitySelect(city.name)}
+                      /* MODIFICATION 2:
+                        - Added 'flex-shrink-0' to prevent cards from shrinking.
+                        - Added a fixed width, e.g., 'w-64' (256px), to ensure all cards have a consistent size.
+                          You can adjust this width (e.g., 'w-72', 'w-80') to fit your design.
+                      */
+                      className={`flex-shrink-0 w-48 h-50 p-4 rounded-2xl text-left bg-white shadow-md hover:shadow-xl transition-all duration-300 border-3 ${
+                        selectedCity === city.name ? 'border-[#C2461C] scale-100' : 'border-transparent'
+                      }`}
+                    >
+                      <div className="relative h-28 rounded-lg overflow-hidden mb-2">
+                        <Image src={city.imageUrl} alt={city.name} layout="fill" objectFit="cover" />
+                      </div>
+                      <h3 className="text-lg font-normal">{city.name}</h3>
+                      <div className="w-full flex justify-between items-center">
+                        <p className="text-xs text-gray-500">₹{city.price.toLocaleString('en-IN')}/-</p>
+                        <p className="text-xs text-gray-500">{city.duration}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* MONTH SELECTOR */}
-              {selectedCity && (
-                <div className="mt-8">
-                  <h3 className="text-xl font-semibold text-center mb-4">Dates from {selectedCity}</h3>
-                  <div className="flex justify-center flex-wrap gap-4">
-                    {availableMonths.map((month) => (
-                      <button
-                        key={month}
-                        onClick={() => handleMonthSelect(selectedCity, month)}
-                        className={`px-6 py-2 font-semibold rounded-md text-sm transition-colors duration-300 ${
-                          selectedMonth === month
-                            ? 'bg-orange-500 text-white shadow-md'
-                            : 'bg-white text-gray-700 border hover:bg-orange-100'
-                        }`}
-                      >
-                        {month}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* DATE SELECTOR */}
-              {selectedMonth && (
-                <div className="mt-8 bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
-                  <h4 className="font-bold text-center mb-4">Available Dates for {selectedMonth}</h4>
-                  {filteredDates.length > 0 ? (
-                    <div className="flex flex-wrap justify-center gap-4">
-                      {filteredDates.map((day, index) => (
+              <div className="bg-white w-full items-left px-6 py-4 mt-2">
+                {/* MONTH SELECTOR */}
+                {selectedCity && (
+                  <div className="">
+                    <h3 className="text-md font-normal mb-4">Dates from {selectedCity}</h3>
+                    <div className="flex flex-wrap gap-4">
+                      {availableMonths.map((month) => (
                         <button
-                          key={index}
-                          onClick={() => setSelectedDate(day)}
-                          className={`h-12 w-12 flex items-center justify-center rounded-full border-2 font-bold transition-colors duration-200 ${
-                            selectedDate === day
-                              ? 'bg-orange-500 text-white border-orange-500'
-                              : 'border-orange-300 text-orange-500 hover:bg-orange-100'
+                          key={month}
+                          onClick={() => handleMonthSelect(selectedCity, month)}
+                          className={`px-2 py-1 font-normal rounded-md text-sm transition-colors duration-300 ${
+                            selectedMonth === month
+                              ? 'bg-[#C2461C] text-white shadow-md'
+                              : 'bg-white text-gray-700 border hover:bg-orange-300'
                           }`}
                         >
-                          {day}
+                          {month}
                         </button>
                       ))}
                     </div>
-                  ) : (
-                    <p className="text-center text-gray-500">No dates available for {selectedMonth}.</p>
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
+
+                {/* DATE SELECTOR */}
+                {selectedMonth && (
+                  <div className="mt-6 bg-white rounded-lg w-full mx-auto">
+                    {filteredDates.length > 0 ? (
+                      <div className="flex flex-wrap gap-4">
+                        {filteredDates.map((day, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setSelectedDate(day)}
+                            className={`h-9 w-9 flex items-center justify-center rounded-full border-2 font-normal transition-colors duration-200 text-md ${
+                              selectedDate === day
+                                ? 'text-gray-700 border-[#C2461C]'
+                                : 'text-gray-700 border-gray-300 hover:bg-orange-300'
+                            }`}
+                          >
+                            {day}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 text-sm">No dates available for {selectedMonth}.</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* SCHEDULE (Dynamic per package) */}
-            <div className="mt-16">
-              <h2 className="text-3xl font-bold text-center mb-12">Schedule</h2>
+            <div className="mt-4 px-2">
+              <h2 className="text-xl px-4 font-normal text-[#C2461C] mb-4">Schedule</h2>
               {currentPackage && currentPackage.itinerary ? (
                 <div className="relative border-l-2 border-orange-200 ml-4">
                   {currentPackage.itinerary.map((day, index) => (
-                    <div key={index} className="mb-12 pl-12">
-                      <div className="absolute -left-[11px] top-1 h-5 w-5 rounded-full bg-orange-500 border-4 border-white"></div>
-                      <p className="text-sm font-semibold text-orange-500">
-                        DAY {day.day} - {getFormattedItineraryDate(day.day)}
+                    <div key={index} className="mb-6 pl-6">
+                      <div className="absolute -left-[4px] h-2 w-2 rounded-full bg-[#C2461C]"></div>
+                      <p className="text-sm font-semibold text-gray-700">
+                        DAY {day.day}<p className="inline text-sm font-normal text-gray-500"> • {getFormattedItineraryDate(day.day)}</p>
                       </p>
-                      <h3 className="text-2xl font-bold mt-1">{day.title}</h3>
-                      <p className="text-gray-600 mt-2">
+                      <h3 className="text-xl font-normal text-gray-7\900 mt-1">{day.title}</h3>
+                      <p className="text-sm text-gray-500 mt-2">
                         {day.description}{' '}
-                        <a href="#" className="text-orange-500 font-semibold">
+                        <a href="#" className="text-[#C2461C] font-normal">
                           Know more
                         </a>
                       </p>
-                      <Image
-                        src={day.imageUrl}
-                        alt={day.title}
-                        width={800}
-                        height={500}
-                        className="rounded-lg mt-4 shadow-md"
-                      />
+                      <div className="w-full h-[1px] bg-gray-300 my-6 max-w-2xl"></div>
+                      <div className="mt-4 max-w-[600px] max-h-[400px] rounded-lg overflow-hidden"> {/* 1. Create a wrapper and give it a max-width */}
+                        {day.imageUrl && (
+                          <Image
+                            src={day.imageUrl}
+                            alt={day.title}
+                            width={600}
+                            height={400}
+                            className="rounded-lg shadow-md w-full h-auto" /* 2. Make image responsive */
+                          />
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
                  <div className="text-center text-gray-500 bg-white p-8 rounded-lg shadow-md">
-                   <h4 className="font-bold text-lg">Please select a departure city and date.</h4>
-                   <p>The detailed day-by-day schedule will appear here once you make a selection.</p>
+                   <h4 className="font-bold text-base">Please select a departure city and date.</h4>
+                   <p className="text-sm">The detailed day-by-day schedule will appear here once you make a selection.</p>
                  </div>
               )}
             </div>
 
             {/* ATTRACTIONS */}
-            <div className="mt-16">
-              <h2 className="text-3xl font-bold text-center mb-8">Attractions</h2>
+            <div className="bg-gray-50 px-6 py-4">
+              <h2 className="text-2xl font-normal text-[#C2461C] mb-8">Attractions</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {destination.attractions.map((attraction) => (
                   <div key={attraction.name} className="relative rounded-lg overflow-hidden group">
-                    <Image src={attraction.imageUrl} alt={attraction.name} width={500} height={400} objectFit="cover" />
+                    <Image src={attraction.imageUrl} alt={attraction.name} width={150} height={100} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <p className="absolute bottom-4 left-4 text-white text-xl font-bold">{attraction.name}</p>
+                    <p className="absolute bottom-4 left-4 text-white text-lg font-bold">{attraction.name}</p>
                   </div>
                 ))}
               </div>

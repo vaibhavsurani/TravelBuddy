@@ -1,5 +1,6 @@
 // components/Header.js
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X, Home, Compass, Info, Phone } from 'lucide-react';
@@ -14,10 +15,12 @@ const navLinks = [
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  // State for styling the header (transparent vs. solid)
+  // This state remains for the background change at 10px
   const [isScrolled, setIsScrolled] = useState(false);
   
-  // New states to control visibility based on scroll direction
+  // 1. NEW state specifically for the logo change at 400px
+  const [isPast400px, setIsPast400px] = useState(false);
+
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -25,24 +28,22 @@ const Header = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // This part handles the background style change
+      // Original logic for background style (unchanged)
       setIsScrolled(currentScrollY > 10);
 
-      // This is the new logic for showing/hiding the header
+      // 2. NEW logic to update the state for the logo change
+      setIsPast400px(currentScrollY > 400);
+
+      // Original logic for showing/hiding header (unchanged)
       if (currentScrollY < 400) {
-        // Always show header if near the top
         setShowHeader(true);
       } else {
         if (currentScrollY > lastScrollY) {
-          // If scrolling down, hide the header
           setShowHeader(false);
         } else {
-          // If scrolling up, show the header
           setShowHeader(true);
         }
       }
-
-      // Update the last scroll position
       setLastScrollY(currentScrollY);
     };
 
@@ -52,24 +53,40 @@ const Header = () => {
     };
   }, [lastScrollY]);
 
-  // Dynamically change style classes based on scroll state
+  // This logic is unchanged and still uses 'isScrolled'
   const headerClasses = isScrolled
-    ? 'bg-white top-2 max-w-7xl shadow-md rounded-md' // Scrolled state
-    : 'bg-transparent text-white'; // Top of page state (changed to transparent and white text)
+    ? ' shadow-md rounded-md'
+    : 'bg-transparent text-white';
 
-  const linkColor = isScrolled ? 'text-gray-800' : 'text-black'; // Text is white at the top
+  const headerClasses2 = isPast400px
+    ? 'bg-white'
+    : 'bg-transparent text-white';
+
+  // This logic is also unchanged
+  const linkColor = isPast400px ? 'text-[#C2461C]' : 'text-white';
+
+  // 3. CHANGED: The logo source now depends on the new 'isPast400px' state
+  const logoSrc = isPast400px 
+    ? '/images/TravelBuddy-orange.png' 
+    : '/images/TravelBuddy-white.png';
 
   return (
     <>
       <header
-        className={`mx-auto sticky z-30 transition-all duration-300 ${headerClasses} ${
-          // Add these classes for the show/hide animation
+        className={`top-2 max-w-[1216px] mx-auto sticky w-full z-30 transition-all duration-300 ${headerClasses} ${headerClasses2} ${
           showHeader ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
         <div className="container mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
-          <Link href="/" className={`text-2xl font-bold pointer-events-auto ${linkColor}`}>
-            TravelBuddy
+          <Link href="/">
+            <Image
+              src={logoSrc}
+              alt="TravelBuddy Logo"
+              width={150}
+              height={40}
+              className="pointer-events-auto"
+              priority
+            />
           </Link>
           <button
             onClick={() => setIsSidebarOpen(true)}

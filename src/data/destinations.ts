@@ -106,56 +106,56 @@ export const destinations: Destination[] = [
         {
             day: 1,
             title: 'Departure from Ahmedabad',
-            description: 'Board the non-AC sleeper train for Kochi with the group.',
-            imageUrl: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df',
+            description: 'Overnight Train Journey to Kochi',
+            imageUrl: '',
         },
         {
             day: 2,
-            title: 'Arrive in Kochi',
+            title: 'Arrive at Kochi in Afternoon - Free Day for Sightseeing',
             description:
-            'Explore Fort Kochi, Chinese Fishing Nets, and spice markets.',
-            imageUrl: 'https://images.unsplash.com/photo-1593651031213-7b3da2b8a145',
+            'Explore Fort Kochi’s Colonial Charm, Chinese Fishing Nets, and Local Spice Markets!',
+            imageUrl: '/images/KeralaDay2.jpg',
         },
         {
             day: 3,
-            title: 'Munnar Hills',
+            title: 'Travel from Kochi to Munnar – The Gateway to the Hills',
             description:
-            'Travel to Munnar and explore lush tea gardens, waterfalls, and local markets.',
-            imageUrl: 'https://images.unsplash.com/photo-1549923028-595a6332c21c',
+            'Visit Cheeyappara & Valara Waterfalls en route to the hill town of Munnar.',
+            imageUrl: '/images/KeralaDay3.jpg',
         },
         {
             day: 4,
-            title: 'Eravikulam National Park',
+            title: 'Munnar to Thekkady – Into the Spice Heartland',
             description:
-            'Visit the park, enjoy trekking trails, and experience Kerala’s wildlife.',
-            imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
+            'Explore Tea Gardens, Mattupetty Dam & Echo Point.',
+            imageUrl: '/images/KeralaDay4.jpg',
         },
         {
             day: 5,
-            title: 'Thekkady',
+            title: 'Thekkady to Alleppey – Backwater Bliss',
             description:
-            'Boat ride in Periyar Lake and spice plantation experience.',
-            imageUrl: 'https://images.unsplash.com/photo-1625244724120-1ed7a959a06d',
+            'Drive through cardamom hills, visit spice plantations, and enjoy Periyar Lake boating.',
+            imageUrl: '/images/KeralaDay5.jpg',
         },
         {
             day: 6,
-            title: 'Alleppey Backwaters',
-            description: 'Houseboat ride with authentic Kerala meals on board.',
-            imageUrl: 'https://images.unsplash.com/photo-1593693397640-052a21e4a3c0',
+            title: 'Free Time in Alleppey and Return to Kochi in Evening',
+            description: 'Enjoy a short houseboat cruise in Alleppey before returning to Kochi',
+            imageUrl: '/images/KeralaDay6.jpg',
         },
         {
             day: 7,
-            title: 'Kochi Leisure & Shopping',
+            title: 'Departure from Kochi',
             description:
-            'Enjoy free time in Kochi for shopping and cultural experiences.',
-            imageUrl: 'https://images.unsplash.com/photo-1616690710400-4e2cd99b9b91',
+            'Disperse after Breakfast, Overnight Train Journey',
+            imageUrl: '',
         },
         {
             day: 8,
-            title: 'Return to Ahmedabad',
+            title: 'Arrival at Ahmedabad',
             description:
-            'Board train from Kochi and disperse with unforgettable memories.',
-            imageUrl: 'https://images.unsplash.com/photo-1624555130581-351a0218b060',
+            'The end of an incredible journey to God\'s Own Country!',
+            imageUrl: '',
         },
         ],
     },
@@ -631,28 +631,28 @@ export const destinations: Destination[] = [
       {
         name: 'Ahmedabad',
         imageUrl:
-          'https://images.unsplash.com/photo-1582209539513-4a1b24c30b2c?q=80&w=2532&auto=format&fit=crop',
+          '/images/dAhmedabad.jpg',
         price: 11800,
         duration: '8 days',
       },
       {
         name: 'Kochi',
         imageUrl:
-          'https://images.unsplash.com/photo-1524231757912-21f4fe3a7207?q=80&w=2574&auto=format&fit=crop',
+          '/images/dKochi.jpg',
         price: 9999,
         duration: '6 days',
       },
       {
         name: 'Mumbai',
         imageUrl:
-          'https://images.unsplash.com/photo-1562979314-1ace75b05474?q=80&w=2574&auto=format&fit=crop',
+          '/images/dMumbai.jpg',
         price: 11400,
         duration: '8 days',
       },
       {
         name: 'Baroda/Surat',
         imageUrl:
-          'https://images.unsplash.com/photo-1622303273200-2e4532a81878?q=80&w=2574&auto=format&fit=crop',
+          '/images/dBaroda-Surat.jpg',
         price: 11800,
         duration: '8 days',
       },

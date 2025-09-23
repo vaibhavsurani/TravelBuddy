@@ -24,10 +24,10 @@ const BookingFlowModal = ({ destination, onClose }: BookingFlowModalProps) => {
   };
 
   const handleDateSelect = (date: string) => {
-    if (!selectedPackage) return;
-    // Navigate to the registration page with all the details in the URL
-    router.push(`/register?destinationId=${destination.id}&packageId=${selectedPackage.id}&date=${encodeURIComponent(date)}`);
-  };
+  if (!selectedPackage) return;
+  // Navigate to the signup page with the booking details
+  router.push(`/signup?destinationId=${destination.id}&packageId=${selectedPackage.id}&date=${encodeURIComponent(date)}`);
+};
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">

@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { destinations, Destination } from '@/data/destinations';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BookingFlowModal from '@/components/BookingFlowModal';
 import InclusionExclusionModal from '@/components/InclusionExclusionModal';
-import { Calendar, Zap, Users, Mountain, ArrowRight, Download, Check } from 'lucide-react';
+import { Calendar, Zap, Users, Mountain, ArrowRight, Download, Check, MessageSquare } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -49,6 +49,49 @@ const DestinationPage = () => {
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [filteredDates, setFilteredDates] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  // --- REVISED: CODE FOR STICKY BAR ---
+  const [isBarVisible, setIsBarVisible] = useState(false);
+  const joinUsSectionRef = useRef<HTMLDivElement>(null);
+  const policiesSectionRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    // 1. Don't run this effect if the destination data hasn't loaded yet.
+    if (!destination) return;
+
+    const handleScroll = () => {
+      // 2. Safety check to ensure the referenced elements exist in the DOM.
+      const joinUsEl = joinUsSectionRef.current;
+      const policiesEl = policiesSectionRef.current;
+
+      if (!joinUsEl || !policiesEl) return;
+
+      const joinUsTop = joinUsEl.offsetTop;
+      const policiesTop = policiesEl.offsetTop;
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      // Condition: The bottom of the screen is between the "Join Us" and "Policies" sections.
+      const shouldBeVisible =
+        scrollY + windowHeight >= joinUsTop &&
+        scrollY + windowHeight < policiesTop;
+      
+      // 3. Only update state if the visibility has actually changed.
+      setIsBarVisible(prev => prev === shouldBeVisible ? prev : shouldBeVisible);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Call handler once on setup to check initial position
+    handleScroll();
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+    // 4. Dependency: This effect will re-run ONLY when the `destination` data changes.
+  }, [destination]);
+  // --- END: REVISED CODE ---
+
 
   useEffect(() => {
     if (id) {
@@ -130,7 +173,7 @@ const DestinationPage = () => {
   };
 
   if (!destination) {
-    return <div className="text-sm">Loading or destination not found...</div>;
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
   const { keyStats } = destination;
@@ -278,25 +321,15 @@ const DestinationPage = () => {
             </div>
 
             {/* CITY SELECTOR */}
-            <div className="mt-4 px-6">
+            <div ref={joinUsSectionRef} className="mt-4 px-6">
               <div className="">
                 <h2 className="text-2xl w-full text-left font-normal text-[#C2461C] text-center">Join us from</h2>
                 
-                {/* MODIFICATION 1: 
-                  - Replaced 'grid' with 'flex' to lay out items in a row.
-                  - Added 'overflow-x-auto' to enable horizontal scrolling.
-                  - Added 'pb-4' to give some space for the scrollbar.
-                */}
                 <div className="flex overflow-x-auto gap-6 pb-4 pt-4 pr-2">
                   {destination.departureCities.map((city) => (
                     <button
                       key={city.name}
                       onClick={() => handleCitySelect(city.name)}
-                      /* MODIFICATION 2:
-                        - Added 'flex-shrink-0' to prevent cards from shrinking.
-                        - Added a fixed width, e.g., 'w-64' (256px), to ensure all cards have a consistent size.
-                          You can adjust this width (e.g., 'w-72', 'w-80') to fit your design.
-                      */
                       className={`flex-shrink-0 w-48 h-50 p-4 rounded-2xl text-left bg-white shadow-md hover:shadow-xl transition-all duration-300 border-3 ${
                         selectedCity === city.name ? 'border-[#C2461C] scale-100' : 'border-transparent'
                       }`}
@@ -383,14 +416,14 @@ const DestinationPage = () => {
                         </a>
                       </p>
                       <div className="w-full h-[1px] bg-gray-300 my-6 max-w-2xl"></div>
-                      <div className="mt-4 max-w-[600px] max-h-[400px] rounded-lg overflow-hidden"> {/* 1. Create a wrapper and give it a max-width */}
+                      <div className="mt-4 max-w-[600px] max-h-[400px] rounded-lg overflow-hidden">
                         {day.imageUrl && (
                           <Image
                             src={day.imageUrl}
                             alt={day.title}
                             width={600}
                             height={400}
-                            className="rounded-lg shadow-md w-full h-auto" /* 2. Make image responsive */
+                            className="rounded-lg shadow-md w-full h-auto"
                           />
                         )}
                       </div>
@@ -398,10 +431,10 @@ const DestinationPage = () => {
                   ))}
                 </div>
               ) : (
-                 <div className="text-center text-gray-500 bg-white p-8 rounded-lg shadow-md">
-                   <h4 className="font-bold text-base">Please select a departure city and date.</h4>
-                   <p className="text-sm">The detailed day-by-day schedule will appear here once you make a selection.</p>
-                 </div>
+                  <div className="text-center text-gray-500 bg-white p-8 rounded-lg shadow-md">
+                    <h4 className="font-bold text-base">Please select a departure city and date.</h4>
+                    <p className="text-sm">The detailed day-by-day schedule will appear here once you make a selection.</p>
+                  </div>
               )}
             </div>
 
@@ -409,22 +442,17 @@ const DestinationPage = () => {
             <div className="bg-gray-50 px-6 py-4">
               <h2 className="text-2xl font-normal text-[#C2461C] mb-3">Attractions</h2>
               
-              {/* 1. Main container changed to a flexbox with horizontal scrolling */}
               <div className="flex overflow-x-auto gap-6"> 
                 {destination.attractions.map((attraction) => (
-                  
-                  // 2. Each attraction card is prevented from shrinking and given a fixed width
                   <div key={attraction.name} className="flex-shrink-0 w-64"> 
                     <Image 
                       src={attraction.imageUrl} 
                       alt={attraction.name} 
                       width={400} 
                       height={300}
-                      // 3. Image is styled to be rounded and fit its container
                       className="rounded-2xl h-40 w-full object-cover" 
                     />
                     
-                    {/* 4. Text is now a simple paragraph below the image */}
                     <p className="mt-2 text-gray-800">{attraction.name}</p>
                   </div>
                 ))}
@@ -432,7 +460,7 @@ const DestinationPage = () => {
             </div>
 
             {/* POLICIES */}
-            <div className="mt-16 mb-16 bg-white shadow-lg rounded-lg p-8">
+            <div ref={policiesSectionRef} className="mt-16 mb-16 bg-white shadow-lg rounded-lg p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <PolicyLink text="Inclusion & Exclusion" onClick={() => setIsInclusionModalOpen(true)} />
                 <PolicyLink text="Things to Carry" />
@@ -459,6 +487,34 @@ const DestinationPage = () => {
           onClose={() => setIsInclusionModalOpen(false)}
         />
       )}
+
+      {/* --- STICKY BOOKING BAR --- */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] p-3 z-40 transform transition-transform duration-300 ease-in-out ${
+          isBarVisible ? 'translate-y-0' : 'translate-y-full'
+        }`}
+      >
+        {destination && (
+          <div className="max-w-7xl px-8 mx-auto flex justify-between items-center px-4">
+            <div>
+              <p className="text-sm text-gray-500">From</p>
+              <p className="font-bold text-lg text-gray-900">
+                ₹{destination.basePrice.toLocaleString('en-IN')}{' '}
+                <span className="font-normal text-sm">/ person</span>
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsBookingModalOpen(true)}
+                className="bg-[#C2461C] text-white font-bold py-3 px-6 rounded-lg hover:bg-orange-600 transition text-sm"
+              >
+                Book Now
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      {/* --- END: BOOKING BAR --- */}
     </>
   );
 };

@@ -81,7 +81,7 @@ export default function Home() {
               <h2 className="text-lg font-normal text-gray-500 mb-4">Recommended camps by our Instructors</h2>
             </div>
 
-            {/* CORRECTED: Using a smaller number (2) to reduce the gap. */}
+            
             <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide space-x-2">
               {popularDestinations.map((destination) => (
                 <div key={destination.id} className="flex-shrink-0 w-52">

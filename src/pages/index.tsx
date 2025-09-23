@@ -1,11 +1,31 @@
 import Head from 'next/head';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import DestinationCard from '@/components/DestinationCard'; // Make sure this is imported
-import { destinations } from '@/data/destinations'; // Make sure this is imported
+import DestinationCard from '@/components/DestinationCard';
+import { destinations } from '@/data/destinations';
+import TypingText from '@/components/TypingText'; 
+import React, { useState, useEffect } from 'react';
+
 
 export default function Home() {
   const popularDestinations = destinations.slice(0, 3);
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const heroImages: string[] = [
+    '/images/home1.jpg',
+    '/images/home2.jpg',
+    '/images/home3.jpg',
+    '/images/home4.jpg',
+    '/images/home5.jpg',
+  ];
+  const typingWords: string[] = ["Adventure", "Nature", "Thrill", "Peace", "Excitement"];
+
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setIdx((i) => (i + 1) % heroImages.length), 4000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -19,43 +39,61 @@ export default function Home() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-          <section className="relative h-[60vh] flex items-center justify-center text-white -top-15">
+        <section
+          style={{
+            position: "relative",
+            width: "100vw",
+            left: "50%",
+            marginLeft: "-50vw",
+          }}
+          className="h-[75vh] overflow-hidden text-left -top-15"
+        >
+          {heroImages.map((img, i) => (
             <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=2070&auto=format&fit=crop')" }}
+              key={i}
+              className={`absolute inset-0 bg-center bg-cover transition-opacity duration-1000 ${
+                i === idx ? "opacity-100 z-20" : "opacity-0 z-10"
+              }`}
+              style={{ backgroundImage: `url(${img})` }}
             >
-              <div className="absolute inset-0 bg-black opacity-50"></div>
+              <div className="absolute inset-0 bg-black/50" />
             </div>
-            <div className="relative z-10 text-center px-4">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4">Discover Your Next Adventure</h1>
-              <p className="text-lg md:text-2xl">Explore the beautiful landscapes of India.</p>
+          ))}
+
+          <div className="relative z-30 px-6 w-full max-w-6xl mx-auto h-full flex flex-col items-start justify-center text-white text-left">
+            <h1 className="text-xl md:text-2xl font-medium mb-4">
+              Experience
+              <span className="block text-4xl md:text-6xl font-semibold mt-2">
+                <TypingText words={typingWords} />
+              </span>
+            </h1>
+            <p className="text-lg md:text-2xl">
+              Discover journeys that resonate with your soul.
+            </p>
+          </div>
+        </section>
+
+        {/* Popular Destinations Section */}
+        <section className="bg-gray-50 py-16 max-w-6xl w-full mx-auto -mt-24">
+          <div className="container mx-auto px-6">
+            <div className="text-left">
+              <h2 className="text-2xl font-normal text-[#C2461C]">Highlighted Events</h2>
+              <h2 className="text-lg font-normal text-gray-500 mb-4">Recommended camps by our Instructors</h2>
             </div>
-          </section>
 
-          {/* Popular Destinations Section */}
-          <section className="bg-gray-50 py-16">
-            <div className="container mx-auto px-6"> {/* Removed text-center from the main container */}
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-800 mb-12">Popular Destinations</h2>
-              </div>
-
-              {/* 1. Changed from 'grid' to 'flex' for horizontal layout */}
-              <div className="flex overflow-x-auto gap-8 pb-4 scrollbar-hide">
-                {popularDestinations.map((destination) => (
-                  
-                  // 2. Added a wrapper to control the size of each card in the slider
-                  <div key={destination.id} className="flex-shrink-0 w-80"> 
-                    <DestinationCard destination={destination} />
-                  </div>
-
-                ))}
-              </div>
+            
+            <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide space-x-2">
+              {popularDestinations.map((destination) => (
+                <div key={destination.id} className="flex-shrink-0 w-52">
+                  <DestinationCard destination={destination} />
+                </div>
+              ))}
             </div>
-          </section>
+          </div>
+        </section>
       </main>
 
       <Footer />
     </div>
   );
 }
-

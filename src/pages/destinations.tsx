@@ -42,7 +42,8 @@ const AllDestinationsPage = () => {
       <Header />
 
       <main className="flex-grow">
-        <div className="container mx-auto px-6 py-12">
+        <div className="container mx-auto px-6 py-12 max-w-6xl">
+          
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800">Explore Our Destinations</h1>
             <p className="mt-4 text-lg text-gray-600">Find your next adventure from our curated list of stunning locations across India.</p>

@@ -511,6 +511,137 @@ export const destinations: Destination[] = [
       duration: '2 days'
     }],
   basePrice: 1799
+},
+{
+  id: 'matheran',
+  name: 'Marvelous Matheran',
+  imageUrl: '/images/Matheran/MatheranHome.jpg',
+  subtitle: 'A walk through the clouds!',
+  shortDescription: 'An enchanting hill station in Maharashtra, known for its lush green forests and a complete ban on vehicles.',
+  longDescription: "Matheran, a quaint and tranquil hill station, is a true marvel of nature. It's Asia's only automobile-free hill station, which means you'll explore its scenic trails and lush forests by foot or on horseback. This trip takes you through the most mesmerizing parts of Matheran, from sunrise at Panorama Point to the echoing sounds at Echo Point, all while enjoying the serene and misty environment that makes it a perfect escape from city life.",
+  carouselImages: [{
+      src: '/images/Matheran/Matheran1.jpg',
+      alt: 'A group trekking through the misty trails of Matheran'
+    }, {
+      src: '/images/Matheran/Matheran2.jpg',
+      alt: 'Panorama Point viewpoint in Matheran'
+    }, {
+      src: '/images/Matheran/Matheran3.jpg',
+      alt: 'The iconic toy train of Matheran'
+    }, {
+      src: '/images/Matheran/Matheran4.jpg',
+      alt: 'A group enjoying a serene morning in Matheran'
+    }],
+  category: 'Trekking',
+  bestTimeToVisit: 'September to February',
+  availableDates: ['Sep 27 - Sep 29, 2025', 'Oct 4 - Oct 6, 2025', 'Oct 11 - Oct 13, 2025', 'Oct 18 - Oct 20, 2025', 'Oct 25 - Oct 27, 2025', 'Nov 1 - Nov 3, 2025', 'Nov 8 - Nov 10, 2025', 'Nov 15 - Nov 17, 2025', 'Dec 6 - Dec 8, 2025'],
+  packages: [{
+      id: 'm1',
+      destinationId: 'matheran',
+      name: 'From Ahmedabad',
+      price: 3700,
+      duration: '3 days / 2 nights',
+      departureCity: 'Ahmedabad',
+      availableDates: ['Sep 27 - Sep 29, 2025', 'Oct 4 - Oct 6, 2025', 'Oct 11 - Oct 13, 2025'],
+      itinerary: [{
+          day: 1,
+          title: 'Departure from Ahmedabad',
+          description: 'Overnight bus or train journey to Mumbai/Neral. Meet fellow travelers and get ready for the adventure!',
+          imageUrl: '/images/Matheran/MatheranDay1.jpg'
+        }, {
+          day: 2,
+          title: 'Arrival & Matheran Exploration',
+          description: 'Arrive at Neral in the morning. Take the scenic toy train ride to Matheran. After check-in, explore Panorama Point and other nearby viewpoints.',
+          imageUrl: '/images/Matheran/MatheranDay2.jpg'
+        }, {
+          day: 3,
+          title: 'Trekking & Return Journey',
+          description: 'Start the day with a trek to famous viewpoints like Echo Point and Louisa Point. Enjoy the serene beauty before beginning the return journey to Ahmedabad in the evening.',
+          imageUrl: '/images/Matheran/MatheranDay3.jpg'
+        }]
+    }, {
+      id: 'm2',
+      destinationId: 'matheran',
+      name: 'From Mumbai',
+      price: 3200,
+      duration: '3 days / 2 nights',
+      departureCity: 'Mumbai',
+      availableDates: ['Nov 1 - Nov 3, 2025', 'Nov 8 - Nov 10, 2025', 'Nov 15 - Nov 17, 2025'],
+      itinerary: [{
+          day: 1,
+          title: 'Arrival at Neral & Toy Train Ride',
+          description: 'Assemble at Neral railway station. Board the toy train for a picturesque journey to Matheran. Check into your hotel and enjoy a local sightseeing walk.',
+          imageUrl: '/images/Matheran/MatheranDay1.jpg'
+        }, {
+          day: 2,
+          title: 'Trekking to Viewpoints',
+          description: "A full day of trekking to explore Matheran's famous points including Echo Point and Charlotte Lake. Enjoy the tranquility of this no-vehicle zone.",
+          imageUrl: '/images/Matheran/MatheranDay2.jpg'
+        }, {
+          day: 3,
+          title: 'Sunrise & Departure',
+          description: 'Witness a beautiful sunrise from Panorama Point. Enjoy a final walk and breakfast before checking out and beginning your journey back to Mumbai.',
+          imageUrl: '/images/Matheran/MatheranDay3.jpg'
+        }]
+    },{
+      id: 'm3',
+      destinationId: 'matheran',
+      name: 'From Surat/Baroda',
+      price: 3600,
+      duration: '3 days / 2 nights',
+      departureCity: 'Baroda/Surat',
+      availableDates: ['Oct 18 - Oct 20, 2025', 'Oct 25 - Oct 27, 2025', 'Dec 6 - Dec 8, 2025'],
+      itinerary: [{
+          day: 1,
+          title: 'Departure from Surat/Baroda',
+          description: 'Overnight bus or train journey to Mumbai/Neral. Meet the group and begin the adventure!',
+          imageUrl: '/images/Matheran/MatheranDay1.jpg'
+        }, {
+          day: 2,
+          title: 'Arrival & Matheran Exploration',
+          description: 'Arrive at Neral in the morning. Enjoy the famous toy train ride to Matheran. After check-in, explore Panorama Point and other nearby viewpoints.',
+          imageUrl: '/images/Matheran/MatheranDay2.jpg'
+        }, {
+          day: 3,
+          title: 'Trekking & Return Journey',
+          description: 'Start the day with a trek to famous viewpoints like Echo Point and Louisa Point. Enjoy the serene beauty before beginning the return journey to Surat/Baroda in the evening.',
+          imageUrl: '/images/Matheran/MatheranDay3.jpg'
+        }]
+    }],
+  keyStats: {
+    duration: '3 days / 2 nights',
+    difficulty: 'Easy',
+    ageGroup: '6-40 years',
+    maxAltitude: '2,625 ft'
+  },
+  importantUpdate: 'The toy train schedule is subject to change. Please contact us for the latest updates.',
+  brochureUrl: '#',
+  inclusions: ['Traveling as per package', 'Food (Breakfast & Dinner)', 'Stay in Hotel in 3/4 sharing basis', '5% GST', 'First Aid Support', 'And Much more..'],
+  exclusions: ['Food during travel duration & Lunch', 'Sightseeing Entry Fees if any', 'Anything not listed above'],
+  attractions: [{
+      name: 'Panorama Point',
+      imageUrl: '/images/Matheran/MatheranA1.jpg'
+    }, {
+      name: 'Echo Point',
+      imageUrl: '/images/Matheran/MatheranA2.jpg'
+    }],
+  departureCities: [{
+      name: 'Ahmedabad',
+      imageUrl: '/images/Matheran/dAhmedabad.jpg',
+      price: 3700,
+      duration: '3 days'
+    }, {
+      name: 'Mumbai',
+      imageUrl: '/images/Matheran/dMumbai.jpg',
+      price: 3200,
+      duration: '3 days'
+    },{
+      name: 'Baroda/Surat',
+      imageUrl: '/images/Matheran/dBaroda.jpg',
+      price: 3600,
+      duration: '3 days'
+    }],
+  basePrice: 3200
 }
 ];
 

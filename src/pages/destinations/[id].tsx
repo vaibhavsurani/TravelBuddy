@@ -311,7 +311,7 @@ const DestinationPage = () => {
                     </div>
                     <button
                       onClick={() => setIsBookingModalOpen(true)}
-                      className="mt-6 w-full bg-[#C2461C] text-white font-bold py-3 rounded-2xl hover:bg-orange-600 transition text-sm"
+                      className="mt-6 w-full bg-[#C2461C] text-white font-bold py-3 rounded-2xl hover:bg-[#C2461C]/80 transition text-sm focus:outline-none focus:ring-4 focus:ring-[#E9743C]/50"
                     >
                       Book Now
                     </button>
@@ -357,10 +357,10 @@ const DestinationPage = () => {
                         <button
                           key={month}
                           onClick={() => handleMonthSelect(selectedCity, month)}
-                          className={`px-2 py-1 font-normal rounded-md text-sm transition-colors duration-300 ${
+                          className={`px-2 py-1 font-normal rounded-sm text-sm transition-colors duration-300 ${
                             selectedMonth === month
-                              ? 'bg-[#C2461C] text-white shadow-md'
-                              : 'bg-white text-gray-700 border hover:bg-orange-300'
+                              ? 'bg-[#C2461C] text-white shadow-md focus:outline-none focus:ring-3 focus:ring-[#E9743C]/50'
+                              : 'bg-white text-orange-600 border hover:bg-orange-600 hover:text-white'
                           }`}
                         >
                           {month}
@@ -381,7 +381,7 @@ const DestinationPage = () => {
                             onClick={() => setSelectedDate(day)}
                             className={`h-9 w-9 flex items-center justify-center rounded-full border-2 font-normal transition-colors duration-200 text-md ${
                               selectedDate === day
-                                ? 'text-gray-700 border-[#C2461C]'
+                                ? 'text-gray-700 border-[#C2461C] '
                                 : 'text-gray-700 border-gray-300 hover:bg-orange-300'
                             }`}
                           >
@@ -490,7 +490,7 @@ const DestinationPage = () => {
 
       {/* --- STICKY BOOKING BAR --- */}
       <div
-        className={`fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] p-3 z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-0 left-0 right-0 bg-gray-100 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] px-3 py-1 z-40 transform transition-transform duration-300 ease-in-out ${
           isBarVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
@@ -506,7 +506,7 @@ const DestinationPage = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsBookingModalOpen(true)}
-                className="bg-[#C2461C] text-white font-bold py-3 px-6 rounded-lg hover:bg-orange-600 transition text-sm"
+                className="bg-[#C2461C] text-white font-normal py-2 px-3 rounded-lg hover:bg-[#C2461C]/80 transition text-md focus:outline-none focus:ring-4 focus:ring-[#E9743C]/50"
               >
                 Book Now
               </button>

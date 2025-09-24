@@ -8,3 +8,31 @@ body {
   font-family: 'Inter', sans-serif;
   @apply bg-gray-50 text-gray-800;
 }
+/* Container for the list */
+/* Container for the list */
+.custom-lines {
+  list-style: none; /* Removes the default bullet points */
+  padding-left: 25px; /* Adjust space for the smaller line */
+}
+
+/* Individual list items */
+.custom-lines li {
+  position: relative; /* Anchor for positioning the line */
+  padding-left: 10px; /* Space between the line and the text */
+}
+
+/* The smaller custom line */
+.custom-lines li::before {
+  content: ''; /* Required for the pseudo-element to appear */
+  position: absolute; 
+  left: -25px; /* Moves the line to the left of the text */
+  top: 50%; /* Puts the line's top edge at the vertical middle */
+  transform: translateY(-50%); /* Perfectly centers the line vertically */
+
+  /* --- Style for a smaller, thinner line --- */
+  height: 1px; /* Makes the line thinner */
+  width: 12px; /* Makes the line shorter */
+  background-color: rgb(222, 221, 221); 
+  border-radius: 1px;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.15); /* A slightly tighter shadow */
+}

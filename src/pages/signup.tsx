@@ -7,10 +7,7 @@ const SignupPage = () => {
   const router = useRouter();
   const { destinationId, packageId, date } = router.query;
 
-  // State to manage the steps of the flow
   const [step, setStep] = useState<'mobile' | 'otp'>('mobile');
-  
-  // State for mobile number and OTP
   const [mobileNumber, setMobileNumber] = useState('');
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
@@ -27,9 +24,7 @@ const SignupPage = () => {
     try {
       const res = await fetch('/api/send-otp', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobileNumber }),
       });
 
@@ -51,15 +46,12 @@ const SignupPage = () => {
     try {
       const res = await fetch('/api/verify-otp', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobileNumber, otp }),
       });
 
       const data = await res.json();
       if (data.success) {
-        // OTP is correct, proceed to the registration form
         router.push(`/register?destinationId=${destinationId}&packageId=${packageId}&date=${date}&mobileNumber=${mobileNumber}`);
       } else {
         setError(data.message || 'Invalid OTP. Please try again.');
@@ -69,57 +61,59 @@ const SignupPage = () => {
     }
   };
 
-  // Add a type guard to ensure query parameters are strings
   if (typeof destinationId !== 'string' || typeof packageId !== 'string' || typeof date !== 'string') {
     return <div>Error: Missing required booking details.</div>;
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded-lg shadow-xl w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">User Verification</h1>
-        <p className="text-sm text-gray-600 mb-6 text-center">
-          Enter your mobile number and OTP to continue with your booking.
+    <div className="flex items-center justify-center min-h-screen bg-slate-50">
+      <div className="p-8 bg-white rounded-xl shadow-lg border border-gray-200 w-full max-w-md">
+        <h1 className="text-2xl font-bold text-[#C2461C] mb-2 ">User Verification</h1>
+        <p className="text-sm text-gray-500 mb-6 ">
+          Enter your mobile number to continue with your booking.
         </p>
 
-        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+        {error && <p className="text-red-500 text-sm mb-4 text-center bg-red-50 p-3 rounded-md">{error}</p>}
 
-        {/* This form is always visible */}
         <form onSubmit={step === 'mobile' ? handleSendOtp : handleVerifyOtp} className="space-y-4">
           <div>
-            <label className="block text-gray-700">Mobile Number</label>
+            <label htmlFor="mobile" className="block text-md font-medium text-gray-700">Phone Number</label>
             <input
+              id="mobile"
               type="tel"
               value={mobileNumber}
-              onChange={(e) => setMobileNumber(e.target.value)}
+              onChange={(e) => setMobileNumber(e.target.value.replace(/[^0-9]/g, ''))}
               maxLength={10}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              disabled={step === 'otp'} // Disable after OTP is sent
+              placeholder="9876543210"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+              disabled={step === 'otp'}
             />
+            <p className="text-sm text-gray-500 mt-1">We'll send OTP (One Time Password) to this phone number to login to your account.</p>
           </div>
 
-          {/* OTP field is conditionally rendered */}
           {step === 'otp' && (
             <div>
               <p className="text-sm text-gray-600 mb-2">
-                An OTP has been sent to **{mobileNumber}**.
+                An OTP has been sent to <span className="font-semibold text-gray-800">{mobileNumber}</span>.
               </p>
-              <label className="block text-gray-700">Enter OTP</label>
+              <label htmlFor="otp" className="block text-sm font-medium text-gray-700">Enter OTP</label>
               <input
+                id="otp"
                 type="text"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value)}
+                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
                 maxLength={6}
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                placeholder="123456"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
               />
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="bg-[#C2461C] text-white font-normal py-2 px-3 rounded-lg hover:bg-[#C2461C]/80 transition text-md focus:outline-none focus:ring-4 focus:ring-[#E9743C]/50"
           >
             {step === 'mobile' ? 'Send OTP' : 'Verify & Continue'}
           </button>

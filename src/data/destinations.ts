@@ -99,11 +99,11 @@ export const destinations: Destination[] = [
     {
         id: 'k1',
         destinationId: 'kerala',
-        name: 'From Ahmedabad (Non AC Sleeper Train)',
+        name: 'From Ahmedabad (AC Sleeper Train)',
         price: 11800,
         duration: '8 days / 7 nights',
         departureCity: 'Ahmedabad',
-        availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025'],
+        availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025', 'Nov 4 - Nov 11, 2025', 'Nov 7 - Nov 13, 2025', 'Nov 14 - Nov 21, 2025', 'Nov 21 - Nov 28, 2025', 'Dec 7 - Dec 14, 2025'],
         itinerary: [
         {
             day: 1,
@@ -161,6 +161,202 @@ export const destinations: Destination[] = [
         },
         ],
     },
+    {
+        id: 'k1-1',
+        destinationId: 'kerala',
+        name: 'From Ahmedabad (Non AC Sleeper Train)',
+        price: 11800,
+        duration: '8 days / 7 nights',
+        departureCity: 'Ahmedabad',
+        availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025', 'Nov 4 - Nov 11, 2025', 'Nov 7 - Nov 13, 2025', 'Nov 14 - Nov 21, 2025', 'Nov 21 - Nov 28, 2025', 'Dec 7 - Dec 14, 2025'],
+        itinerary: [
+        {
+            day: 1,
+            title: 'Departure from Ahmedabad',
+            description: 'Overnight Train Journey to Kochi',
+            imageUrl: '',
+        },
+        {
+            day: 2,
+            title: 'Arrive at Kochi in Afternoon - Free Day for Sightseeing',
+            description:
+            'Explore Fort Kochi’s Colonial Charm, Chinese Fishing Nets, and Local Spice Markets!',
+            imageUrl: '/images/KeralaDay2.jpg',
+        },
+        {
+            day: 3,
+            title: 'Travel from Kochi to Munnar – The Gateway to the Hills',
+            description:
+            'Visit Cheeyappara & Valara Waterfalls en route to the hill town of Munnar.',
+            imageUrl: '/images/KeralaDay3.jpg',
+        },
+        {
+            day: 4,
+            title: 'Munnar to Thekkady – Into the Spice Heartland',
+            description:
+            'Explore Tea Gardens, Mattupetty Dam & Echo Point.',
+            imageUrl: '/images/KeralaDay4.jpg',
+        },
+        {
+            day: 5,
+            title: 'Thekkady to Alleppey – Backwater Bliss',
+            description:
+            'Drive through cardamom hills, visit spice plantations, and enjoy Periyar Lake boating.',
+            imageUrl: '/images/KeralaDay5.jpg',
+        },
+        {
+            day: 6,
+            title: 'Free Time in Alleppey and Return to Kochi in Evening',
+            description: 'Enjoy a short houseboat cruise in Alleppey before returning to Kochi',
+            imageUrl: '/images/KeralaDay6.jpg',
+        },
+        {
+            day: 7,
+            title: 'Departure from Kochi',
+            description:
+            'Disperse after Breakfast, Overnight Train Journey',
+            imageUrl: '',
+        },
+        {
+            day: 8,
+            title: 'Arrival at Ahmedabad',
+            description:
+            'The end of an incredible journey to God\'s Own Country!',
+            imageUrl: '',
+        },
+        ],
+    },
+    {
+        id: 'k1-2',
+        destinationId: 'kerala',
+        name: 'From Ahmedabad (AC Sleeper Train) via Mumbai',
+        price: 11800,
+        duration: '8 days / 7 nights',
+        departureCity: 'Ahmedabad',
+        availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025', 'Nov 4 - Nov 11, 2025', 'Nov 7 - Nov 13, 2025', 'Nov 14 - Nov 21, 2025', 'Nov 21 - Nov 28, 2025', 'Dec 7 - Dec 14, 2025'],
+        itinerary: [
+        {
+            day: 1,
+            title: 'Departure from Ahmedabad',
+            description: 'Overnight Train Journey to Kochi',
+            imageUrl: '',
+        },
+        {
+            day: 2,
+            title: 'Arrive at Kochi in Afternoon - Free Day for Sightseeing',
+            description:
+            'Explore Fort Kochi’s Colonial Charm, Chinese Fishing Nets, and Local Spice Markets!',
+            imageUrl: '/images/KeralaDay2.jpg',
+        },
+        {
+            day: 3,
+            title: 'Travel from Kochi to Munnar – The Gateway to the Hills',
+            description:
+            'Visit Cheeyappara & Valara Waterfalls en route to the hill town of Munnar.',
+            imageUrl: '/images/KeralaDay3.jpg',
+        },
+        {
+            day: 4,
+            title: 'Munnar to Thekkady – Into the Spice Heartland',
+            description:
+            'Explore Tea Gardens, Mattupetty Dam & Echo Point.',
+            imageUrl: '/images/KeralaDay4.jpg',
+        },
+        {
+            day: 5,
+            title: 'Thekkady to Alleppey – Backwater Bliss',
+            description:
+            'Drive through cardamom hills, visit spice plantations, and enjoy Periyar Lake boating.',
+            imageUrl: '/images/KeralaDay5.jpg',
+        },
+        {
+            day: 6,
+            title: 'Free Time in Alleppey and Return to Kochi in Evening',
+            description: 'Enjoy a short houseboat cruise in Alleppey before returning to Kochi',
+            imageUrl: '/images/KeralaDay6.jpg',
+        },
+        {
+            day: 7,
+            title: 'Departure from Kochi',
+            description:
+            'Disperse after Breakfast, Overnight Train Journey',
+            imageUrl: '',
+        },
+        {
+            day: 8,
+            title: 'Arrival at Ahmedabad',
+            description:
+            'The end of an incredible journey to God\'s Own Country!',
+            imageUrl: '',
+        },
+        ],
+    },
+    {
+        id: 'k1-3',
+        destinationId: 'kerala',
+        name: 'From Ahmedabad (Non AC Sleeper Train) via Mumbai',
+        price: 11800,
+        duration: '8 days / 7 nights',
+        departureCity: 'Ahmedabad',
+        availableDates: ['Sep 26 - Oct 3, 2025', 'Oct 3 - Oct 10, 2025', 'Nov 4 - Nov 11, 2025', 'Nov 7 - Nov 13, 2025', 'Nov 14 - Nov 21, 2025', 'Nov 21 - Nov 28, 2025', 'Dec 7 - Dec 14, 2025'],
+        itinerary: [
+        {
+            day: 1,
+            title: 'Departure from Ahmedabad',
+            description: 'Overnight Train Journey to Kochi',
+            imageUrl: '',
+        },
+        {
+            day: 2,
+            title: 'Arrive at Kochi in Afternoon - Free Day for Sightseeing',
+            description:
+            'Explore Fort Kochi’s Colonial Charm, Chinese Fishing Nets, and Local Spice Markets!',
+            imageUrl: '/images/KeralaDay2.jpg',
+        },
+        {
+            day: 3,
+            title: 'Travel from Kochi to Munnar – The Gateway to the Hills',
+            description:
+            'Visit Cheeyappara & Valara Waterfalls en route to the hill town of Munnar.',
+            imageUrl: '/images/KeralaDay3.jpg',
+        },
+        {
+            day: 4,
+            title: 'Munnar to Thekkady – Into the Spice Heartland',
+            description:
+            'Explore Tea Gardens, Mattupetty Dam & Echo Point.',
+            imageUrl: '/images/KeralaDay4.jpg',
+        },
+        {
+            day: 5,
+            title: 'Thekkady to Alleppey – Backwater Bliss',
+            description:
+            'Drive through cardamom hills, visit spice plantations, and enjoy Periyar Lake boating.',
+            imageUrl: '/images/KeralaDay5.jpg',
+        },
+        {
+            day: 6,
+            title: 'Free Time in Alleppey and Return to Kochi in Evening',
+            description: 'Enjoy a short houseboat cruise in Alleppey before returning to Kochi',
+            imageUrl: '/images/KeralaDay6.jpg',
+        },
+        {
+            day: 7,
+            title: 'Departure from Kochi',
+            description:
+            'Disperse after Breakfast, Overnight Train Journey',
+            imageUrl: '',
+        },
+        {
+            day: 8,
+            title: 'Arrival at Ahmedabad',
+            description:
+            'The end of an incredible journey to God\'s Own Country!',
+            imageUrl: '',
+        },
+        ],
+    },
+    
     {
         id: 'k2',
         destinationId: 'kerala',

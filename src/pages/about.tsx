@@ -60,7 +60,7 @@ const AboutPage = () => {
                 <p className="text-[#C2461C]">Developer</p>
               </div>
               {/* Team Member 2 */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col">
                 <div className="h-[150px] w-[150px] overflow-hidden">
                   <Image
                     src="/images/Dev2.jpg"

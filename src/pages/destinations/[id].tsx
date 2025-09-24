@@ -256,7 +256,7 @@ const DestinationPage = () => {
           </div>
 
           {/* MAIN CONTENT WRAPPER (Constrained to center) */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
+          <div className="max-w-6xl mx-auto px-8 mt-14">
             {/* DETAILS CARD */}
             <div className="relative bg-white shadow-lg rounded-lg p-8 -mt-24">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -495,10 +495,11 @@ const DestinationPage = () => {
         }`}
       >
         {destination && (
-          <div className="max-w-7xl px-8 mx-auto flex justify-between items-center px-4">
+          <div className="max-w-6xl px-8 mx-auto flex justify-between items-center px-4">
             <div>
-              <p className="text-sm text-gray-500">From</p>
-              <p className="font-bold text-lg text-gray-900">
+              
+              <p className="font-bold text-lg text-gray-700">
+                <p className="text-sm font-normal text-gray-500 inline">From   </p>
                 ₹{destination.basePrice.toLocaleString('en-IN')}{' '}
                 <span className="font-normal text-sm">/ person</span>
               </p>

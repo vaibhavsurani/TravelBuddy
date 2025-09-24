@@ -16,12 +16,12 @@ const ContactPage = () => {
       <main className="flex-grow">
         <div className="container mx-auto -mt-15 flex flex-col w-full items-center ">
           <div className="h-[65vh] bg-[url('/images/home3.jpg')] w-full bg-cover bg-center flex flex-col justify-center items-center text-white px-4">
-            <div className="max-w-6xl">
+            <div className="max-w-6xl px-6">
               <h1 className="text-4xl md:text-5xl font-bold text-[#C2461C]">Get in Touch</h1>
               <p className="mt-4 text-lg text-white">We'd love to hear from you! Whether you have a question about our trips, pricing, or anything else, our team is ready to answer all your questions.</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 max-w-6xl my-4 md:grid-cols-2 gap-12 items-start w-full">
+          <div className="grid grid-cols-1 max-w-6xl px-6 my-4 md:grid-cols-2 gap-12 items-start w-full">
             {/* Contact Form */}
             <div className="bg-white p-8 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h2>

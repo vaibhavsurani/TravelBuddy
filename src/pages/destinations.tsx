@@ -70,7 +70,7 @@ const AllDestinationsPage = () => {
         </section>
 
         {/* --- 2. Main Content Section (Filters and Cards) --- */}
-        <section className="container mx-auto py-12 px-4 max-w-6xl">
+        <section className="container mx-auto py-12 px-6 max-w-6xl">
           {/* Category Filter Buttons */}
           <div className="flex flex-wrap gap-3 mb-12">
             {categories.map(category => (
@@ -91,7 +91,7 @@ const AllDestinationsPage = () => {
 
           {/* Destination Grid */}
           {filteredDestinations.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-16">
               {filteredDestinations.map(destination => (
                 <DestinationCard key={destination.id} destination={destination} />
               ))}

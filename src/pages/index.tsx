@@ -60,8 +60,8 @@ export default function Home() {
             </div>
           ))}
 
-          <div className="relative z-30 px-14 w-full max-w-6xl mx-auto h-full flex flex-col items-start justify-center text-white text-left">
-            <h1 className="text-xl md:text-2xl font-medium mb-4">
+          <div className="relative z-30 px-6 w-full max-w-6xl mx-auto h-full flex flex-col items-start justify-center text-white text-left">
+            <h1 className="text-xl md:text-2xl font-medium mb-2">
               Experience
               <span className="block text-4xl md:text-6xl font-semibold mt-2">
                 <TypingText words={typingWords} />
@@ -74,8 +74,8 @@ export default function Home() {
         </section>
 
         {/* Popular Destinations Section */}
-        <section className="bg-gray-50 px-8 py-16 max-w-6xl w-full mx-auto -mt-24">
-          <div className="container mx-auto px-6">
+        <section className="bg-gray-50 px-6 py-16 max-w-6xl w-full mx-auto -mt-24">
+          <div className="container mx-auto">
             <div className="text-left">
               <h2 className="text-2xl font-normal text-[#C2461C]">Highlighted Events</h2>
               <h2 className="text-lg font-normal text-gray-500 mb-4">Recommended camps by our Instructors</h2>

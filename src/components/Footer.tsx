@@ -4,7 +4,7 @@ import { Facebook, Twitter, Instagram } from 'lucide-react'; // 1. Imported icon
 const Footer = () => {
   return (
     <footer className="bg-[#1A1A1A] text-white">
-      <div className="container mx-auto px-8 py-12 max-w-6xl">
+      <div className="container mx-auto px-6 py-12 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div>

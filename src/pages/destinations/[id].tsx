@@ -256,9 +256,9 @@ const DestinationPage = () => {
           </div>
 
           {/* MAIN CONTENT WRAPPER (Constrained to center) */}
-          <div className="max-w-6xl mx-auto px-8 mt-14">
+          <div className="w-full mx-auto mt-14 flex flex-col items-center">
             {/* DETAILS CARD */}
-            <div className="relative bg-white shadow-lg rounded-lg p-8 -mt-24">
+            <div className="relative bg-white max-w-6xl shadow-lg rounded-lg p-8 -mt-24">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left Column */}
                 <div className="lg:col-span-2">
@@ -321,152 +321,154 @@ const DestinationPage = () => {
             </div>
 
             {/* CITY SELECTOR */}
-            <div ref={joinUsSectionRef} className="mt-4 px-6">
-              <div className="">
-                <h2 className="text-2xl w-full text-left font-normal text-[#C2461C] text-center">Join us from</h2>
-                
-                <div className="flex overflow-x-auto gap-6 pb-4 pt-4 pr-2">
-                  {destination.departureCities.map((city) => (
-                    <button
-                      key={city.name}
-                      onClick={() => handleCitySelect(city.name)}
-                      className={`flex-shrink-0 w-48 h-50 p-4 rounded-2xl text-left bg-white shadow-md hover:shadow-xl transition-all duration-300 border-3 ${
-                        selectedCity === city.name ? 'border-[#C2461C] scale-100' : 'border-transparent'
-                      }`}
-                    >
-                      <div className="relative h-28 rounded-lg overflow-hidden mb-2">
-                        <Image src={city.imageUrl} alt={city.name} layout="fill" objectFit="cover" />
-                      </div>
-                      <h3 className="text-lg font-normal">{city.name}</h3>
-                      <div className="w-full flex justify-between items-center">
-                        <p className="text-xs text-gray-500">₹{city.price.toLocaleString('en-IN')}/-</p>
-                        <p className="text-xs text-gray-500">{city.duration}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white w-full items-left px-6 py-4 mt-2">
-                {/* MONTH SELECTOR */}
-                {selectedCity && (
-                  <div className="">
-                    <h3 className="text-md font-normal mb-4">Dates from {selectedCity}</h3>
-                    <div className="flex flex-wrap gap-4">
-                      {availableMonths.map((month) => (
-                        <button
-                          key={month}
-                          onClick={() => handleMonthSelect(selectedCity, month)}
-                          className={`px-2 py-1 font-normal rounded-sm text-sm transition-colors duration-300 ${
-                            selectedMonth === month
-                              ? 'bg-[#C2461C] text-white shadow-md focus:outline-none focus:ring-3 focus:ring-[#E9743C]/50'
-                              : 'bg-white text-orange-600 border hover:bg-orange-600 hover:text-white'
-                          }`}
-                        >
-                          {month}
-                        </button>
-                      ))}
-                    </div>
+            <div className="max-w-6xl">
+              <div ref={joinUsSectionRef} className="mt-4 px-6">
+                <div className="">
+                  <h2 className="text-2xl w-full text-left font-normal text-[#C2461C] text-center">Join us from</h2>
+                  
+                  <div className="flex overflow-x-auto gap-6 pb-4 pt-4 pr-2">
+                    {destination.departureCities.map((city) => (
+                      <button
+                        key={city.name}
+                        onClick={() => handleCitySelect(city.name)}
+                        className={`flex-shrink-0 w-48 h-50 p-4 rounded-2xl text-left bg-white shadow-md hover:shadow-xl transition-all duration-300 border-3 ${
+                          selectedCity === city.name ? 'border-[#C2461C] scale-100' : 'border-transparent'
+                        }`}
+                      >
+                        <div className="relative h-28 rounded-lg overflow-hidden mb-2">
+                          <Image src={city.imageUrl} alt={city.name} layout="fill" objectFit="cover" />
+                        </div>
+                        <h3 className="text-lg font-normal">{city.name}</h3>
+                        <div className="w-full flex justify-between items-center">
+                          <p className="text-xs text-gray-500">₹{city.price.toLocaleString('en-IN')}/-</p>
+                          <p className="text-xs text-gray-500">{city.duration}</p>
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                )}
+                </div>
 
-                {/* DATE SELECTOR */}
-                {selectedMonth && (
-                  <div className="mt-6 bg-white rounded-lg w-full mx-auto">
-                    {filteredDates.length > 0 ? (
+                <div className="bg-white w-full items-left px-6 py-4 mt-2">
+                  {/* MONTH SELECTOR */}
+                  {selectedCity && (
+                    <div className="">
+                      <h3 className="text-md font-normal mb-4">Dates from {selectedCity}</h3>
                       <div className="flex flex-wrap gap-4">
-                        {filteredDates.map((day, index) => (
+                        {availableMonths.map((month) => (
                           <button
-                            key={index}
-                            onClick={() => setSelectedDate(day)}
-                            className={`h-9 w-9 flex items-center justify-center rounded-full border-2 font-normal transition-colors duration-200 text-md ${
-                              selectedDate === day
-                                ? 'text-gray-700 border-[#C2461C] '
-                                : 'text-gray-700 border-gray-300 hover:bg-orange-300'
+                            key={month}
+                            onClick={() => handleMonthSelect(selectedCity, month)}
+                            className={`px-2 py-1 font-normal rounded-sm text-sm transition-colors duration-300 ${
+                              selectedMonth === month
+                                ? 'bg-[#C2461C] text-white shadow-md focus:outline-none focus:ring-3 focus:ring-[#E9743C]/50'
+                                : 'bg-white text-orange-600 border hover:bg-orange-600 hover:text-white'
                             }`}
                           >
-                            {day}
+                            {month}
                           </button>
                         ))}
                       </div>
-                    ) : (
-                      <p className="text-gray-500 text-sm">No dates available for {selectedMonth}.</p>
-                    )}
+                    </div>
+                  )}
+
+                  {/* DATE SELECTOR */}
+                  {selectedMonth && (
+                    <div className="mt-6 bg-white rounded-lg w-full mx-auto">
+                      {filteredDates.length > 0 ? (
+                        <div className="flex flex-wrap gap-4">
+                          {filteredDates.map((day, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setSelectedDate(day)}
+                              className={`h-9 w-9 flex items-center justify-center rounded-full border-2 font-normal transition-colors duration-200 text-md ${
+                                selectedDate === day
+                                  ? 'text-gray-700 border-[#C2461C] '
+                                  : 'text-gray-700 border-gray-300 hover:bg-orange-300'
+                              }`}
+                            >
+                              {day}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-gray-500 text-sm">No dates available for {selectedMonth}.</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* SCHEDULE (Dynamic per package) */}
+              <div className="mt-4 px-2">
+                <h2 className="text-xl px-4 font-normal text-[#C2461C] mb-4">Schedule</h2>
+                {currentPackage && currentPackage.itinerary ? (
+                  <div className="relative border-l-2 border-orange-200 ml-4">
+                    {currentPackage.itinerary.map((day, index) => (
+                      <div key={index} className="mb-6 pl-6">
+                        <div className="absolute -left-[4px] h-2 w-2 rounded-full bg-[#C2461C]"></div>
+                        <p className="text-sm font-semibold text-gray-700">
+                          DAY {day.day}<p className="inline text-sm font-normal text-gray-500"> • {getFormattedItineraryDate(day.day)}</p>
+                        </p>
+                        <h3 className="text-xl font-normal text-gray-7\900 mt-1">{day.title}</h3>
+                        <p className="text-sm text-gray-500 mt-2">
+                          {day.description}{' '}
+                          <a href="#" className="text-[#C2461C] font-normal">
+                            Know more
+                          </a>
+                        </p>
+                        <div className="w-full h-[1px] bg-gray-300 my-6 max-w-2xl"></div>
+                        <div className="mt-4 max-w-[600px] max-h-[400px] rounded-lg overflow-hidden">
+                          {day.imageUrl && (
+                            <Image
+                              src={day.imageUrl}
+                              alt={day.title}
+                              width={600}
+                              height={400}
+                              className="rounded-lg shadow-md w-full h-auto"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                ) : (
+                    <div className="text-center text-gray-500 bg-white p-8 rounded-lg shadow-md">
+                      <h4 className="font-bold text-base">Please select a departure city and date.</h4>
+                      <p className="text-sm">The detailed day-by-day schedule will appear here once you make a selection.</p>
+                    </div>
                 )}
               </div>
-            </div>
 
-            {/* SCHEDULE (Dynamic per package) */}
-            <div className="mt-4 px-2">
-              <h2 className="text-xl px-4 font-normal text-[#C2461C] mb-4">Schedule</h2>
-              {currentPackage && currentPackage.itinerary ? (
-                <div className="relative border-l-2 border-orange-200 ml-4">
-                  {currentPackage.itinerary.map((day, index) => (
-                    <div key={index} className="mb-6 pl-6">
-                      <div className="absolute -left-[4px] h-2 w-2 rounded-full bg-[#C2461C]"></div>
-                      <p className="text-sm font-semibold text-gray-700">
-                        DAY {day.day}<p className="inline text-sm font-normal text-gray-500"> • {getFormattedItineraryDate(day.day)}</p>
-                      </p>
-                      <h3 className="text-xl font-normal text-gray-7\900 mt-1">{day.title}</h3>
-                      <p className="text-sm text-gray-500 mt-2">
-                        {day.description}{' '}
-                        <a href="#" className="text-[#C2461C] font-normal">
-                          Know more
-                        </a>
-                      </p>
-                      <div className="w-full h-[1px] bg-gray-300 my-6 max-w-2xl"></div>
-                      <div className="mt-4 max-w-[600px] max-h-[400px] rounded-lg overflow-hidden">
-                        {day.imageUrl && (
-                          <Image
-                            src={day.imageUrl}
-                            alt={day.title}
-                            width={600}
-                            height={400}
-                            className="rounded-lg shadow-md w-full h-auto"
-                          />
-                        )}
-                      </div>
+              {/* ATTRACTIONS */}
+              <div className="bg-gray-50 px-6 py-4">
+                <h2 className="text-2xl font-normal text-[#C2461C] mb-3">Attractions</h2>
+                
+                <div className="flex overflow-x-auto gap-6"> 
+                  {destination.attractions.map((attraction) => (
+                    <div key={attraction.name} className="flex-shrink-0 w-64"> 
+                      <Image 
+                        src={attraction.imageUrl} 
+                        alt={attraction.name} 
+                        width={400} 
+                        height={300}
+                        className="rounded-2xl h-40 w-full object-cover" 
+                      />
+                      
+                      <p className="mt-2 text-gray-800">{attraction.name}</p>
                     </div>
                   ))}
                 </div>
-              ) : (
-                  <div className="text-center text-gray-500 bg-white p-8 rounded-lg shadow-md">
-                    <h4 className="font-bold text-base">Please select a departure city and date.</h4>
-                    <p className="text-sm">The detailed day-by-day schedule will appear here once you make a selection.</p>
-                  </div>
-              )}
-            </div>
-
-            {/* ATTRACTIONS */}
-            <div className="bg-gray-50 px-6 py-4">
-              <h2 className="text-2xl font-normal text-[#C2461C] mb-3">Attractions</h2>
-              
-              <div className="flex overflow-x-auto gap-6"> 
-                {destination.attractions.map((attraction) => (
-                  <div key={attraction.name} className="flex-shrink-0 w-64"> 
-                    <Image 
-                      src={attraction.imageUrl} 
-                      alt={attraction.name} 
-                      width={400} 
-                      height={300}
-                      className="rounded-2xl h-40 w-full object-cover" 
-                    />
-                    
-                    <p className="mt-2 text-gray-800">{attraction.name}</p>
-                  </div>
-                ))}
               </div>
-            </div>
 
-            {/* POLICIES */}
-            <div ref={policiesSectionRef} className="mt-16 mb-16 bg-white shadow-lg rounded-lg p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <PolicyLink text="Inclusion & Exclusion" onClick={() => setIsInclusionModalOpen(true)} />
-                <PolicyLink text="Things to Carry" />
-                <PolicyLink text="Terms & Conditions" />
-                <PolicyLink text="Cancellation Policy" />
-                <PolicyLink text="Request a Call Back!" />
+              {/* POLICIES */}
+              <div ref={policiesSectionRef} className="mt-16 mb-16 bg-white shadow-lg rounded-lg p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <PolicyLink text="Inclusion & Exclusion" onClick={() => setIsInclusionModalOpen(true)} />
+                  <PolicyLink text="Things to Carry" />
+                  <PolicyLink text="Terms & Conditions" />
+                  <PolicyLink text="Cancellation Policy" />
+                  <PolicyLink text="Request a Call Back!" />
+                </div>
               </div>
             </div>
           </div>
@@ -490,30 +492,32 @@ const DestinationPage = () => {
 
       {/* --- STICKY BOOKING BAR --- */}
       <div
-        className={`fixed bottom-0 left-0 right-0 bg-gray-100 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] px-3 py-1 z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-0 left-0 right-0 bg-gray-100 border-t-1 border-gray-200 z-40 transform transition-transform duration-300 ease-in-out ${
           isBarVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        {destination && (
-          <div className="max-w-6xl px-8 mx-auto flex justify-between items-center px-4">
-            <div>
-              
-              <p className="font-bold text-lg text-gray-700">
-                <p className="text-sm font-normal text-gray-500 inline">From   </p>
-                ₹{destination.basePrice.toLocaleString('en-IN')}{' '}
-                <span className="font-normal text-sm">/ person</span>
-              </p>
+        <div className='bg-[#C2461C]/5  px-3 py-1'>
+          {destination && (
+            <div className="max-w-6xl px-6 mx-auto flex justify-between items-center px-4">
+              <div>
+                
+                <p className="font-bold text-lg text-gray-800">
+                  <p className="text-sm font-normal text-gray-800 inline">From   
+                  ₹{destination.basePrice.toLocaleString('en-IN')}{' '}</p>
+                  <span className="font-normal text-sm">/ person</span>
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsBookingModalOpen(true)}
+                  className="bg-[#C2461C] text-white font-normal py-2 px-3 my-2 rounded-lg hover:bg-[#C2461C]/80 transition text-md focus:outline-none focus:ring-4 focus:ring-[#E9743C]/50"
+                >
+                  Book Now
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIsBookingModalOpen(true)}
-                className="bg-[#C2461C] text-white font-normal py-2 px-3 rounded-lg hover:bg-[#C2461C]/80 transition text-md focus:outline-none focus:ring-4 focus:ring-[#E9743C]/50"
-              >
-                Book Now
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {/* --- END: BOOKING BAR --- */}
     </>

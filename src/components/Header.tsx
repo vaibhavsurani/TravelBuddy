@@ -73,7 +73,7 @@ const Header = () => {
   return (
     <>
       <header
-        className={`top-2 max-w-[1088px] mx-auto sticky w-full z-30 transition-all duration-300 ${headerClasses} ${headerClasses2} ${
+        className={`top-2 max-w-6xl mx-auto sticky w-full z-30 transition-all duration-300 ${headerClasses} ${headerClasses2} ${
           showHeader ? 'translate-y-0' : '-translate-y-full'
         }`}
       >

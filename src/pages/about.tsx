@@ -49,7 +49,7 @@ const AboutPage = () => {
               <div className="flex flex-col">
                 <div className="h-[150px] w-[150px] overflow-hidden">
                   <Image
-                    src="/images/Dev1.png"
+                    src="/images/Dev1.jpg"
                     alt="Team Member"
                     width={150}
                     height={150}
@@ -63,7 +63,7 @@ const AboutPage = () => {
               <div className="flex flex-col items-center">
                 <div className="h-[150px] w-[150px] overflow-hidden">
                   <Image
-                    src="/images/Dev2.png"
+                    src="/images/Dev2.jpg"
                     alt="Team Member"
                     width={150}
                     height={150}

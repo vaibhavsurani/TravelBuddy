@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 import { destinations } from '@/data/destinations';
 import { useEffect, useState } from 'react';
 import { ArrowRight, Calendar, ChevronDown } from 'lucide-react';
+import { Listbox } from '@headlessui/react';
+
+const genderOptions = ["Male", "Female", "Other"];
 
 const RegistrationPage = () => {
   const router = useRouter();
@@ -59,7 +62,12 @@ const RegistrationPage = () => {
     return (
        <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="flex-grow container mx-auto px-6 py-12 text-center flex flex-col items-center justify-center">
+        <div className="bg-[#C2461C] py-6 h-[60vh] flex items-center -top-15 relative">
+          <div className="max-w-6xl container mx-auto px-6">
+              <h1 className="text-3xl font-semibold text-white">Registration</h1>
+          </div>
+        </div>
+        <main className="flex-grow container mx-auto px-6 -mt-7 pb-12 text-center flex flex-col items-center justify-center">
             <div className="bg-green-100 p-4 rounded-full mb-4">
                 <svg className="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             </div>
@@ -73,20 +81,20 @@ const RegistrationPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 -top-15 relative">
+    <div className="flex flex-col min-h-screen bg-gray-100 ">
       <Head>
         <title>Registration - {destination.name}</title>
       </Head>
       <Header />
       
       {/* Orange Header Bar */}
-      <div className="bg-[#C2461C] py-6 h-[30vh] flex items-center">
+      <div className="bg-[#C2461C] py-6 h-[60vh] flex items-center -top-15 relative">
           <div className="max-w-6xl container mx-auto px-6">
               <h1 className="text-3xl font-semibold text-white">Registration</h1>
           </div>
       </div>
 
-      <main className="flex-grow container mx-auto px-6 py-12">
+      <main className="flex-grow container mx-auto px-6 pb-12">
         <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
             
             {/* Booking Summary Section */}
@@ -148,15 +156,38 @@ const RegistrationPage = () => {
                             </div>
                             {/* Gender */}
                             <div className="relative">
-                                <label htmlFor={`gender-${index}`} className="block text-sm font-medium text-gray-700">Gender</label>
-                                <select id={`gender-${index}`} value={participant.gender} onChange={e => handleFormChange(index, 'gender', e.target.value)} className="appearance-none mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 pr-8 bg-white focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" required>
-                                    <option value="" disabled>Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <ChevronDown className="absolute right-3 top-9 w-5 h-5 text-gray-400 pointer-events-none" />
-                            </div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Gender
+                                </label>
+
+                                <Listbox
+                                    value={participant.gender}
+                                    onChange={(val) => handleFormChange(index, "gender", val)}
+                                >
+                                    <div className="relative mt-1">
+                                    <Listbox.Button className="w-full border border-gray-300 rounded-md py-2 px-3 text-left bg-white focus:ring-1 focus:ring-orange-500">
+                                        {participant.gender || "Select Gender"}
+                                    </Listbox.Button>
+
+                                    <Listbox.Options className="absolute mt-1 w-full bg-white shadow-lg rounded-md border border-gray-200 z-10">
+                                        {genderOptions.map((gender, i) => (
+                                        <Listbox.Option
+                                            key={i}
+                                            value={gender}
+                                            className={({ active }) =>
+                                            `cursor-pointer select-none py-2 px-3 ${
+                                                active ? "bg-[#C2461C] text-white" : "text-gray-700"
+                                            }`
+                                            }
+                                        >
+                                            {gender}
+                                        </Listbox.Option>
+                                        ))}
+                                    </Listbox.Options>
+                                    </div>
+                                </Listbox>
+                                </div>
+
                         </div>
                     </div>
                 ))}
@@ -170,7 +201,7 @@ const RegistrationPage = () => {
                             <a href="#" className="ml-1 text-orange-600 hover:underline font-medium">(View)</a>
                         </label>
                     </div>
-                    <button type="submit" className="w-auto bg-[#C2461C] hover:bg-orange-700 text-white font-semibold py-3 px-8 rounded-lg text-base transition-colors flex items-center justify-center">
+                    <button type="submit" className="w-auto bg-[#C2461C] hover:bg-orange-700 text-white font-semibold py-2 px-3 rounded-lg text-base transition-colors flex items-center justify-center">
                         Register
                         <ArrowRight className="ml-2 w-5 h-5" />
                     </button>

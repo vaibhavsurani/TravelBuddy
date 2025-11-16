@@ -70,7 +70,7 @@ const AllDestinationsPage = () => {
         </section>
 
         {/* --- 2. Main Content Section (Filters and Cards) --- */}
-        <section className="container mx-auto py-12 px-6 max-w-6xl">
+        <section className="container mx-auto -mt-3 pb-12 px-6 max-w-6xl">
           {/* Category Filter Buttons */}
           <div className="flex flex-wrap gap-3 mb-12">
             {categories.map(category => (
@@ -81,7 +81,7 @@ const AllDestinationsPage = () => {
                 className={`px-6 py-2 font-semibold rounded-full transition-colors duration-300 ${
                   selectedCategory === category
                     ? 'bg-[#C2461C] text-white shadow-md'
-                    : 'bg-white text-gray-700 hover:bg-orange-100 border'
+                    : 'bg-white text-gray-700 hover:bg-orange-100'
                 }`}
               >
                 {category}

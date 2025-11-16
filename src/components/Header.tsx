@@ -1,9 +1,8 @@
-// components/Header.js
-
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Home, Compass, Info, Phone } from 'lucide-react';
+import { Menu, X, Home, Compass, Info, Phone, User, LogIn, LogOut } from 'lucide-react';
+import { useUser } from '@/context/UserContext';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: <Home size={20} /> },
@@ -14,27 +13,21 @@ const navLinks = [
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
-  // This state remains for the background change at 10px
   const [isScrolled, setIsScrolled] = useState(false);
-  
-  // 1. NEW state specifically for the logo change at 400px
   const [isPast400px, setIsPast400px] = useState(false);
-
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  
+  // Auth state
+  const { user, profile, logout } = useUser();
+  // const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); // <-- REMOVED
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
-      // Original logic for background style (unchanged)
       setIsScrolled(currentScrollY > 10);
-
-      // 2. NEW logic to update the state for the logo change
       setIsPast400px(currentScrollY > 400);
 
-      // Original logic for showing/hiding header (unchanged)
       if (currentScrollY < 400) {
         setShowHeader(true);
       } else {
@@ -53,7 +46,17 @@ const Header = () => {
     };
   }, [lastScrollY]);
 
-  // This logic is unchanged and still uses 'isScrolled'
+  // Logout handler
+  const handleLogout = async () => {
+    await logout();
+    setIsSidebarOpen(false); // Close sidebar on logout
+  };
+
+  // const openAuthModal = () => {  // <-- REMOVED
+  //   setIsSidebarOpen(false);
+  //   setIsAuthModalOpen(true);
+  // };
+  
   const headerClasses = isScrolled
     ? ' shadow-md rounded-md'
     : 'bg-transparent text-white';
@@ -62,10 +65,7 @@ const Header = () => {
     ? 'bg-white'
     : 'bg-transparent text-white';
 
-  // This logic is also unchanged
   const linkColor = isPast400px ? 'text-[#C2461C]' : 'text-white';
-
-  // 3. CHANGED: The logo source now depends on the new 'isPast400px' state
   const logoSrc = isPast400px 
     ? '/images/TravelBuddy-orange.png' 
     : '/images/TravelBuddy-white.png';
@@ -129,9 +129,51 @@ const Header = () => {
                 </Link>
               </li>
             ))}
+            
+            <hr className="my-4 border-gray-200" />
+            
+            {user ? (
+              <>
+                <li className="mb-4">
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="flex items-center space-x-4 p-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                  >
+                    <User size={20} />
+                    <span className="font-semibold">{profile?.full_name || 'My Profile'}</span>
+                  </Link>
+                </li>
+                <li className="mb-4">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center space-x-4 p-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                  >
+                    <LogOut size={20} />
+                    <span className="font-semibold">Logout</span>
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li className="mb-4">
+                {/* --- UPDATED: This is now a Link, not a button --- */}
+                <Link
+                  href="/auth"
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="flex items-center space-x-4 p-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                >
+                  <LogIn size={20} />
+                  <span className="font-semibold">Login / Sign Up</span>
+                </Link>
+              </li>
+            )}
+            
           </ul>
         </nav>
       </aside>
+
+      {/* --- REMOVED Auth Modal --- */}
+      {/* {isAuthModalOpen && <AuthModal onClose={() => setIsAuthModalOpen(false)} />} */}
     </>
   );
 };

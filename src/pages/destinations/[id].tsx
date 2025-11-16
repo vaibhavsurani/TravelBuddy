@@ -321,7 +321,7 @@ const DestinationPage = () => {
             </div>
 
             {/* CITY SELECTOR */}
-            <div className="max-w-6xl">
+            <div className="w-full max-w-6xl">
               <div ref={joinUsSectionRef} className="mt-4 px-6">
                 <div className="">
                   <h2 className="text-2xl w-full text-left font-normal text-[#C2461C] text-center">Join us from</h2>

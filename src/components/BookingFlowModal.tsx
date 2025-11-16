@@ -31,7 +31,7 @@ const BookingFlowModal = ({ destination, onClose }: BookingFlowModalProps) => {
 
   const handleDateSelect = (date: string) => {
     if (!selectedPackage) return;
-    router.push(`/signup?destinationId=${destination.id}&packageId=${selectedPackage.id}&date=${encodeURIComponent(date)}`);
+    router.push(`/auth?destinationId=${destination.id}&packageId=${selectedPackage.id}&date=${encodeURIComponent(date)}`);
   };
 
   return (

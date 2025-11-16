@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { User, Session } from '@supabase/supabase-js';
-import { useRouter } from 'next/router'; // Import useRouter
+import { useRouter } from 'next/router';
 
 // Define the shape of a pending booking
 interface PendingBooking {
@@ -15,6 +15,7 @@ interface Profile {
   id: string;
   full_name: string;
   avatar_url: string;
+  role: string; // <-- ADD THIS LINE
 }
 
 // Define the shape of the context
@@ -70,7 +71,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(true);
       supabase
         .from('profiles')
-        .select('*')
+        .select('*') // This will now also select the 'role' column
         .eq('id', user.id)
         .single()
         .then(({ data, error }) => {
@@ -104,6 +105,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
     setSession(null);
     setProfile(null);
+    router.push('/'); // Redirect to home on logout
   };
 
   const value = {

@@ -1,8 +1,14 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Home, Compass, Info, Phone, User, LogIn, LogOut } from 'lucide-react';
+// --- ADDED: LayoutDashboard and Plus icons ---
+import {
+  Menu, X, Home, Compass, Info, Phone,
+  User, LogIn, LogOut, LayoutDashboard, Plus
+} from 'lucide-react';
 import { useUser } from '@/context/UserContext';
+// We don't need AuthModal here anymore
+// import AuthModal from './AuthModal'; 
 
 const navLinks = [
   { href: '/', label: 'Home', icon: <Home size={20} /> },
@@ -20,7 +26,6 @@ const Header = () => {
   
   // Auth state
   const { user, profile, logout } = useUser();
-  // const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); // <-- REMOVED
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,11 +56,6 @@ const Header = () => {
     await logout();
     setIsSidebarOpen(false); // Close sidebar on logout
   };
-
-  // const openAuthModal = () => {  // <-- REMOVED
-  //   setIsSidebarOpen(false);
-  //   setIsAuthModalOpen(true);
-  // };
   
   const headerClasses = isScrolled
     ? ' shadow-md rounded-md'
@@ -134,16 +134,47 @@ const Header = () => {
             
             {user ? (
               <>
-                <li className="mb-4">
-                  <Link
-                    href="/profile"
-                    onClick={() => setIsSidebarOpen(false)}
-                    className="flex items-center space-x-4 p-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-orange-500 transition-colors"
-                  >
-                    <User size={20} />
-                    <span className="font-semibold">{profile?.full_name || 'My Profile'}</span>
-                  </Link>
-                </li>
+                {/* --- NEW: Admin Links --- */}
+                {profile && profile.role === 'admin' ? (
+                  <>
+                    <li className="mb-4">
+                      <Link
+                        href="/admin"
+                        onClick={() => setIsSidebarOpen(false)}
+                        className="flex items-center space-x-4 p-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                      >
+                        <LayoutDashboard size={20} />
+                        <span className="font-semibold">Admin Dashboard</span>
+                      </Link>
+                    </li>
+                    <li className="mb-4">
+                      <Link
+                        href="/admin/add-trip"
+                        onClick={() => setIsSidebarOpen(false)}
+                        className="flex items-center space-x-4 p-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                      >
+                        <Plus size={20} />
+                        <span className="font-semibold">Add New Trip</span>
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    {/* --- Regular User "My Profile" Link --- */}
+                    <li className="mb-4">
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsSidebarOpen(false)}
+                        className="flex items-center space-x-4 p-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                      >
+                        <User size={20} />
+                        <span className="font-semibold">{profile?.full_name || 'My Profile'}</span>
+                      </Link>
+                    </li>
+                  </>
+                )}
+
+                {/* --- Logout button (for both admins and users) --- */}
                 <li className="mb-4">
                   <button
                     onClick={handleLogout}
@@ -156,7 +187,7 @@ const Header = () => {
               </>
             ) : (
               <li className="mb-4">
-                {/* --- UPDATED: This is now a Link, not a button --- */}
+                {/* --- Login/Sign Up Link --- */}
                 <Link
                   href="/auth"
                   onClick={() => setIsSidebarOpen(false)}
@@ -172,8 +203,7 @@ const Header = () => {
         </nav>
       </aside>
 
-      {/* --- REMOVED Auth Modal --- */}
-      {/* {isAuthModalOpen && <AuthModal onClose={() => setIsAuthModalOpen(false)} />} */}
+      {/* Auth Modal is no longer needed here */}
     </>
   );
 };

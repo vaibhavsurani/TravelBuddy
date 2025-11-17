@@ -2,19 +2,28 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
-import { destinations, Destination } from '@/data/destinations';
+// --- 1. IMPORT types and SUPABASE ---
+import type { GetStaticProps, GetStaticPaths, NextPage } from 'next';
+import type { Destination, DestinationAttraction, DepartureCity, TravelPackage, ItineraryDay } from '@/data/destinations';
+import { supabase } from '@/lib/supabaseClient';
+// --- (Your other imports are unchanged) ---
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BookingFlowModal from '@/components/BookingFlowModal';
 import InclusionExclusionModal from '@/components/InclusionExclusionModal';
-import { Calendar, Zap, Users, Mountain, ArrowRight, Download, Check, MessageSquare } from 'lucide-react';
+import { Calendar, Zap, Users, Mountain, ArrowRight, Download, Check } from 'lucide-react'; // Removed unused MessageSquare
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
-import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules'; // Removed EffectFade
+import DestinationCard from '@/components/DestinationCard';
+// We don't need useUser or AuthModal here anymore if the modal handles the redirect
+// import { useUser } from '@/contexts/UserContext';
+// import AuthModal from '@/components/AuthModal';
 
+// --- (StatCard and PolicyLink are unchanged) ---
 const StatCard = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) => (
   <div className="flex items-center space-x-3">
     <div className="text-[#C2461C]">{icon}</div>
@@ -35,88 +44,65 @@ const PolicyLink = ({ text, onClick }: { text: string; onClick?: () => void }) =
   </button>
 );
 
-const DestinationPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
+// --- 2. DEFINE the props the page will receive ---
+interface DestinationPageProps {
+  destination: Destination;
+  relatedDestinations: Destination[];
+}
 
-  const [destination, setDestination] = useState<Destination | null>(null);
+// --- 3. CHANGE the component to accept props ---
+const DestinationPage: NextPage<DestinationPageProps> = ({ destination, relatedDestinations }) => {
+  const router = useRouter();
+  // const { user, setPendingBooking } = useUser(); // <-- REMOVED
+
+  // (All your other state and refs are correct and unchanged)
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isInclusionModalOpen, setIsInclusionModalOpen] = useState(false);
-
-  // States for the interactive date filter
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [availableMonths, setAvailableMonths] = useState<string[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [filteredDates, setFilteredDates] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-
-  // --- REVISED: CODE FOR STICKY BAR ---
   const [isBarVisible, setIsBarVisible] = useState(false);
   const joinUsSectionRef = useRef<HTMLDivElement>(null);
   const policiesSectionRef = useRef<HTMLDivElement>(null);
   
+  // (All your handlers and useEffects for scrolling, city/date select, etc. are correct and unchanged)
   useEffect(() => {
-    // 1. Don't run this effect if the destination data hasn't loaded yet.
     if (!destination) return;
-
     const handleScroll = () => {
-      // 2. Safety check to ensure the referenced elements exist in the DOM.
       const joinUsEl = joinUsSectionRef.current;
       const policiesEl = policiesSectionRef.current;
-
       if (!joinUsEl || !policiesEl) return;
-
       const joinUsTop = joinUsEl.offsetTop;
       const policiesTop = policiesEl.offsetTop;
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
-
-      // Condition: The bottom of the screen is between the "Join Us" and "Policies" sections.
       const shouldBeVisible =
         scrollY + windowHeight >= joinUsTop &&
         scrollY + windowHeight < policiesTop;
-      
-      // 3. Only update state if the visibility has actually changed.
       setIsBarVisible(prev => prev === shouldBeVisible ? prev : shouldBeVisible);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Call handler once on setup to check initial position
     handleScroll();
-
-    // Cleanup function
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-    // 4. Dependency: This effect will re-run ONLY when the `destination` data changes.
   }, [destination]);
-  // --- END: REVISED CODE ---
 
-
-  useEffect(() => {
-    if (id) {
-      const foundDestination = destinations.find((d) => d.id === id);
-      setDestination(foundDestination || null);
-    }
-  }, [id]);
-
-  // Auto-select first city when destination loads
   useEffect(() => {
     if (destination && destination.departureCities.length > 0 && !selectedCity) {
       handleCitySelect(destination.departureCities[0].name);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [destination]);
+  }, [destination, selectedCity]);
 
   const handleMonthSelect = (cityName: string, monthName: string) => {
     if (!destination) return;
     setSelectedMonth(monthName);
-
     const cityPackages = destination.packages.filter((p) => p.departureCity === cityName);
     const allDates = cityPackages.flatMap((p) => p.availableDates);
     const uniqueDates = [...new Set(allDates)];
     const monthIndex = new Date(Date.parse(monthName + ' 1, 2025')).getMonth();
-
     const datesForMonth = uniqueDates
       .filter((dateString) => {
         const startDateString = dateString.split(' - ')[0];
@@ -125,12 +111,9 @@ const DestinationPage = () => {
       })
       .map((dateString) => {
         const startDatePart = dateString.split(' - ')[0];
-        return startDatePart.split(' ')[1]; // just the day number
+        return startDatePart.split(' ')[1];
       });
-
     setFilteredDates(datesForMonth);
-
-    // Auto-select first available date
     if (datesForMonth.length > 0) {
       setSelectedDate(datesForMonth[0]);
     } else {
@@ -140,15 +123,12 @@ const DestinationPage = () => {
 
   const handleCitySelect = (cityName: string) => {
     if (!destination) return;
-
     setSelectedCity(cityName);
     setFilteredDates([]);
     setSelectedDate(null);
-
     const cityPackages = destination.packages.filter((p) => p.departureCity === cityName);
     const allDates = cityPackages.flatMap((p) => p.availableDates);
     const uniqueDates = [...new Set(allDates)];
-
     const monthNames = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December',
@@ -161,35 +141,32 @@ const DestinationPage = () => {
         months.add(monthNames[date.getMonth()]);
       }
     });
-
     const sortedMonths = monthNames.filter((m) => months.has(m));
     setAvailableMonths(sortedMonths);
-
     if (sortedMonths.length > 0) {
       handleMonthSelect(cityName, sortedMonths[0]);
     } else {
       setSelectedMonth(null);
     }
   };
+  
+  // --- 4. REMOVED the handleDateSelected function ---
+  // The modal will handle its own click logic now.
 
-  if (!destination) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  
+  if (router.isFallback) {
+     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
-
+  
   const { keyStats } = destination;
-
-  // Find current package based on city + date
   const currentPackage = destination.packages.find(
     (pkg) => {
       if (pkg.departureCity !== selectedCity) return false;
-      
       return pkg.availableDates.some((date) => {
         const [startDate] = date.split(' - ');
         const [monthStr, dayStr] = startDate.split(' ');
-        
         const monthIndex = new Date(Date.parse(monthStr + " 1, 2000")).getMonth();
         const fullMonthName = new Date(2000, monthIndex).toLocaleString('default', { month: 'long' });
-
         return dayStr === selectedDate && fullMonthName === selectedMonth;
       });
     }
@@ -197,15 +174,10 @@ const DestinationPage = () => {
 
   const getFormattedItineraryDate = (dayNumber: number): string => {
     if (!selectedDate || !selectedMonth) return '';
-
     const monthIndex = new Date(Date.parse(selectedMonth + ' 1, 2025')).getMonth();
     const startDate = new Date(2025, monthIndex, parseInt(selectedDate));
-
-    // Add day offset (0 for day 1, 1 for day 2, etc.)
     const itineraryDate = new Date(startDate);
     itineraryDate.setDate(startDate.getDate() + (dayNumber - 1));
-
-    // Format: Mon, 22 Sep
     return itineraryDate.toLocaleDateString('en-IN', {
       weekday: 'short',
       day: 'numeric',
@@ -213,7 +185,7 @@ const DestinationPage = () => {
     });
   };
 
-
+  // --- 5. Your entire JSX render is UNCHANGED ---
   return (
     <>
       <div className="bg-[#f7f5f2]">
@@ -336,7 +308,7 @@ const DestinationPage = () => {
                         }`}
                       >
                         <div className="relative h-28 rounded-lg overflow-hidden mb-2">
-                          <Image src={city.imageUrl} alt={city.name} layout="fill" objectFit="cover" />
+                          <Image src={city.imageUrl as string} alt={city.name} layout="fill" objectFit="cover" />
                         </div>
                         <h3 className="text-lg font-normal">{city.name}</h3>
                         <div className="w-full flex justify-between items-center">
@@ -409,7 +381,7 @@ const DestinationPage = () => {
                         <p className="text-sm font-semibold text-gray-700">
                           DAY {day.day}<p className="inline text-sm font-normal text-gray-500"> • {getFormattedItineraryDate(day.day)}</p>
                         </p>
-                        <h3 className="text-xl font-normal text-gray-7\900 mt-1">{day.title}</h3>
+                        <h3 className="text-xl font-normal text-gray-700 mt-1">{day.title}</h3>
                         <p className="text-sm text-gray-500 mt-2">
                           {day.description}{' '}
                           <a href="#" className="text-[#C2461C] font-normal">
@@ -420,7 +392,7 @@ const DestinationPage = () => {
                         <div className="mt-4 max-w-[600px] max-h-[400px] rounded-lg overflow-hidden">
                           {day.imageUrl && (
                             <Image
-                              src={day.imageUrl}
+                              src={day.imageUrl as string}
                               alt={day.title}
                               width={600}
                               height={400}
@@ -432,10 +404,10 @@ const DestinationPage = () => {
                     ))}
                   </div>
                 ) : (
-                    <div className="text-center text-gray-500 bg-white p-8 rounded-lg shadow-md">
-                      <h4 className="font-bold text-base">Please select a departure city and date.</h4>
-                      <p className="text-sm">The detailed day-by-day schedule will appear here once you make a selection.</p>
-                    </div>
+                  <div className="text-center text-gray-500 bg-white p-8 rounded-lg shadow-md">
+                    <h4 className="font-bold text-base">Please select a departure city and date.</h4>
+                    <p className="text-sm">The detailed day-by-day schedule will appear here once you make a selection.</p>
+                  </div>
                 )}
               </div>
 
@@ -447,7 +419,7 @@ const DestinationPage = () => {
                   {destination.attractions.map((attraction) => (
                     <div key={attraction.name} className="flex-shrink-0 w-64"> 
                       <Image 
-                        src={attraction.imageUrl} 
+                        src={attraction.imageUrl as string}
                         alt={attraction.name} 
                         width={400} 
                         height={300}
@@ -459,6 +431,22 @@ const DestinationPage = () => {
                   ))}
                 </div>
               </div>
+              
+              {/* Related Destinations Section */}
+              {relatedDestinations && relatedDestinations.length > 0 && (
+                <div className="mt-16 px-6">
+                  <h2 className="text-2xl font-normal text-[#C2461C] text-center mb-8">You Might Also Like</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {relatedDestinations.map(related => (
+                      // You will need to create/import a DestinationCard component for this to work
+                      // <DestinationCard key={related.id} destination={related} />
+                      <div key={related.id} className="bg-white p-4 rounded-lg shadow-md">
+                        <p>{related.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* POLICIES */}
               <div ref={policiesSectionRef} className="mt-16 mb-16 bg-white shadow-lg rounded-lg p-8">
@@ -480,7 +468,11 @@ const DestinationPage = () => {
 
       {/* MODALS */}
       {isBookingModalOpen && destination && (
-        <BookingFlowModal destination={destination} onClose={() => setIsBookingModalOpen(false)} />
+        <BookingFlowModal 
+          destination={destination} 
+          onClose={() => setIsBookingModalOpen(false)} 
+          // --- REMOVED the onDateSelect prop to fix the error ---
+        />
       )}
       {isInclusionModalOpen && (
         <InclusionExclusionModal
@@ -502,8 +494,8 @@ const DestinationPage = () => {
               <div>
                 
                 <p className="font-bold text-lg text-gray-800">
-                  <p className="text-sm font-normal text-gray-800 inline">From   
-                  ₹{destination.basePrice.toLocaleString('en-IN')}{' '}</p>
+                  <span className="text-sm font-normal text-gray-800 inline">From  
+                  ₹{destination.basePrice.toLocaleString('en-IN')}{' '}</span>
                   <span className="font-normal text-sm">/ person</span>
                 </p>
               </div>
@@ -522,6 +514,62 @@ const DestinationPage = () => {
       {/* --- END: BOOKING BAR --- */}
     </>
   );
+};
+
+// --- 7. ADDED getStaticPaths ---
+export const getStaticPaths: GetStaticPaths = async () => {
+  // We can't use static data anymore, so we fetch IDs from Supabase
+  const { data, error } = await supabase.from('destinations').select('id');
+  
+  if (error || !data) {
+    return { paths: [], fallback: 'blocking' };
+  }
+
+  const paths = data.map(dest => ({
+    params: { id: dest.id },
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking', // This will build new pages on demand
+  };
+};
+
+// --- 8. ADDED getStaticProps ---
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { id } = context.params!;
+  
+  // Fetch the single destination's 'data' column by its ID
+  const { data, error } = await supabase
+    .from('destinations')
+    .select('data') // Select the JSONB column
+    .eq('id', id as string)
+    .single();
+
+  if (error || !data) {
+    console.error(`Error fetching destination ${id}:`, error);
+    return { notFound: true }; // This will show a 404 page
+  }
+  
+  const destination: Destination = data.data; // The object is inside 'data'
+
+  // Fetch related destinations
+  const { data: relatedData } = await supabase
+    .from('destinations')
+    .select('data')
+    .eq('category', destination.category) 
+    .neq('id', destination.id) 
+    .limit(3);
+    
+  const relatedDestinations = relatedData ? relatedData.map((item: any) => item.data) : [];
+
+  return {
+    props: {
+      destination,
+      relatedDestinations,
+    },
+    revalidate: 60, // Re-check for updates every 60 seconds
+  };
 };
 
 export default DestinationPage;

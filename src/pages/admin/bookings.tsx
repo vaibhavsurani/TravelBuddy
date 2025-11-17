@@ -90,13 +90,13 @@ const AdminBookings = () => {
         <title>All Bookings</title>
       </Head>
       <Header />
-      <div className="bg-[#C2461C] py-6 h-[60vh] flex items-center -top-15 relative">
+        <div className="bg-[#C2461C] py-6 h-[60vh] flex items-center -top-15 relative">
           <div className="max-w-6xl container mx-auto px-6">
               <h1 className="text-3xl font-semibold text-white">Trip Bookings</h1>
           </div>
         </div>
       {/* Updated padding and flex-grow */}
-      <main className="container mx-auto px-6 pb-12 flex-grow max-w-6xl">
+      <main className="container mx-auto px-6 -mt-7 pb-12 flex-grow max-w-6xl">
         {/* Updated title styling */}
         <h1 className="text-3xl font-bold text-[#C2461C] mb-6">
           All User Bookings

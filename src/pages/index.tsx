@@ -2,13 +2,21 @@ import Head from 'next/head';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DestinationCard from '@/components/DestinationCard';
-import { destinations } from '@/data/destinations';
+import { Destination } from '@/data/destinations';
 import TypingText from '@/components/TypingText'; 
 import React, { useState, useEffect } from 'react';
+import { GetStaticProps } from 'next'; // <-- FIX 1: Removed NextPage
+import { supabase } from '@/lib/supabaseClient';
 
+// --- FIX 2: Define an interface for the page's props ---
+interface HomeProps {
+  destinations: Destination[];
+}
 
-export default function Home() {
-  const popularDestinations = destinations.slice(0, 7); // Show only the first 7 destinations for brevity
+// --- FIX 3: Type the component directly with the interface ---
+const Home = ({ destinations }: HomeProps) => {
+  // If destinations is null or undefined, default to an empty array
+  const popularDestinations = (destinations || []).slice(0, 7); 
   
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -83,11 +91,15 @@ export default function Home() {
 
             
             <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide space-x-2">
-              {popularDestinations.map((destination) => (
-                <div key={destination.id} className="flex-shrink-0 w-52">
-                  <DestinationCard destination={destination} />
-                </div>
-              ))}
+              {popularDestinations.length > 0 ? (
+                popularDestinations.map((destination) => (
+                  <div key={destination.id} className="flex-shrink-0 w-52">
+                    <DestinationCard destination={destination} />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No destinations found.</p>
+              )}
             </div>
           </div>
         </section>
@@ -97,3 +109,35 @@ export default function Home() {
     </div>
   );
 }
+
+// (getStaticProps function is unchanged)
+export const getStaticProps: GetStaticProps = async () => {
+  console.log("Attempting to fetch data in getStaticProps...");
+
+  const { data, error } = await supabase
+    .from('destinations')
+    .select('data'); 
+
+  if (error) {
+    console.error('Error fetching destinations:', error.message);
+    return { props: { destinations: [] } };
+  }
+
+  if (!data) {
+    console.warn('No data returned from destinations table.');
+    return { props: { destinations: [] } };
+  }
+  
+  console.log(`Successfully fetched ${data.length} destinations.`);
+
+  const destinations: Destination[] = data.map((item: any) => item.data);
+
+  return {
+    props: {
+      destinations,
+    },
+    revalidate: 60, 
+  };
+};
+
+export default Home;

@@ -66,9 +66,19 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   // Fetch profile data when user changes
+  // Fetch profile data when user changes
   useEffect(() => {
     if (user) {
-      setLoading(true);
+      // --- THIS IS THE FIX ---
+      // If we already have a profile and it matches the current user,
+      // it means this was just a tab-focus re-check.
+      // We can skip re-fetching and setting the loading state.
+      if (profile && profile.id === user.id) {
+        return;
+      }
+      // --- END OF FIX ---
+
+      setLoading(true); // Only set loading if we need to fetch the profile
       supabase
         .from('profiles')
         .select('*') // This will now also select the 'role' column
@@ -96,8 +106,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       setProfile(null);
     }
-    // Add pendingBooking and router to dependency array
-  }, [user, pendingBooking, router]); 
+    // Add 'profile' to the dependency array
+  }, [user, pendingBooking, router, profile]);
 
   // Logout function
   const logout = async () => {
@@ -123,6 +133,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 // Create a custom hook to use the context
 export const useUser = () => {
   const context = useContext(UserContext);
+  
   if (context === undefined) {
     throw new Error('useUser must be used within a UserProvider');
   }

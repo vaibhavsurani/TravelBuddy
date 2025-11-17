@@ -1,21 +1,21 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'; // <-- RE-ADDED useRouter
 import { X, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Destination, TravelPackage } from '@/data/destinations';
 
 interface BookingFlowModalProps {
   destination: Destination;
   onClose: () => void;
+  // --- REMOVED onDateSelect prop ---
 }
 
 const BookingFlowModal = ({ destination, onClose }: BookingFlowModalProps) => {
-  const router = useRouter();
+  const router = useRouter(); // <-- RE-ADDED
   
   const departureCities = destination.departureCities.map(city => city.name);
 
   const [step, setStep] = useState<'package' | 'date'>('package');
   
-  // FIX: Added type assertion to resolve the error
   const [selectedCity, setSelectedCity] = useState<TravelPackage['departureCity']>(
     (departureCities[0] || '') as TravelPackage['departureCity']
   );
@@ -29,9 +29,11 @@ const BookingFlowModal = ({ destination, onClose }: BookingFlowModalProps) => {
     setStep('date');
   };
 
+  // --- REVERTED to original router.push logic ---
   const handleDateSelect = (date: string) => {
     if (!selectedPackage) return;
-    router.push(`/auth?destinationId=${destination.id}&packageId=${selectedPackage.id}&date=${encodeURIComponent(date)}`);
+    // This will now navigate directly to the register page
+    router.push(`/register?destinationId=${destination.id}&packageId=${selectedPackage.id}&date=${encodeURIComponent(date)}`);
   };
 
   return (
@@ -56,7 +58,7 @@ const BookingFlowModal = ({ destination, onClose }: BookingFlowModalProps) => {
                   {departureCities.map(city => (
                     <button
                       key={city}
-                      onClick={() => setSelectedCity(city as TravelPackage['departureCity'])} // Correctly typed
+                      onClick={() => setSelectedCity(city as TravelPackage['departureCity'])}
                       className={`
                         px-3 py-1.5 font-normal rounded-md text-sm transition-colors duration-200 border
                         ${selectedCity === city
@@ -84,7 +86,7 @@ const BookingFlowModal = ({ destination, onClose }: BookingFlowModalProps) => {
                     `}
                   >
                     <div className="w-20 h-20 bg-gray-200 rounded-md mr-4 flex-shrink-0 overflow-hidden">
-                       <img src={pkg.itinerary[1]?.imageUrl || '/images/placeholder.jpg'} alt={pkg.name} className="w-full h-full object-cover"/>
+                       <img src={pkg.itinerary[1]?.imageUrl as string || '/images/placeholder.jpg'} alt={pkg.name} className="w-full h-full object-cover"/>
                     </div>
                     <div className="flex-grow">
                       <h3 className="text-base font-medium text-gray-800 mb-1">{pkg.name}</h3>

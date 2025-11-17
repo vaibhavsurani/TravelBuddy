@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
   images: {
     domains: [
       'images.unsplash.com',
-      'placehold.co'
+      'placehold.co',
+      'cyoiboldmazqltjboafp.supabase.co',
     ],
   },
 };

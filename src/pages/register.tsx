@@ -2,51 +2,48 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-// Import types and supabase client
-import { destinations, Destination, TravelPackage } from '@/data/destinations';
+// --- 1. REMOVE static data import ---
+// import { destinations } from '@/data/destinations'; 
+// --- 2. IMPORT Supabase and types ---
+import { Destination, TravelPackage } from '@/data/destinations';
 import { supabase } from '@/lib/supabaseClient';
-import { useUser } from '@/context/UserContext';
 import { useEffect, useState } from 'react';
 import { ArrowRight, Calendar, ChevronDown } from 'lucide-react';
 import { Listbox } from '@headlessui/react';
+import { useUser } from '@/context/UserContext';
 
 const genderOptions = ["Male", "Female", "Other"];
 
 const RegistrationPage = () => {
   const router = useRouter();
-  const { user, setPendingBooking } = useUser(); // Get user and context function
+  const { user, setPendingBooking, loading: authLoading } = useUser();
   const { destinationId, packageId, date } = router.query;
 
   const [participants, setParticipants] = useState(1);
   const [formData, setFormData] = useState([ { firstName: '', lastName: '', mobile: '', birthDate: '', gender: ''} ]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [error, setError] = useState<string | null>(null); // For inline errors
-  const [isLoading, setIsLoading] = useState(false); // For submit button
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false); 
 
   // State to hold valid booking info
   const [destination, setDestination] = useState<Destination | null>(null);
   const [travelPackage, setTravelPackage] = useState<TravelPackage | null>(null);
 
-  // This single useEffect handles all validation and redirects
+  // This effect handles all validation, auth, and data fetching
   useEffect(() => {
-    // 1. Wait for the router to be ready
-    if (!router.isReady) {
-      return; // Still loading
+    // 1. Wait for router AND auth to be ready
+    if (!router.isReady || authLoading) {
+      return; // Do nothing until router and auth are both ready
     }
 
-    // 2. Find data based on URL
-    const foundDestination = destinations.find(d => d.id === destinationId);
-    const foundPackage = foundDestination?.packages.find(p => p.id === packageId);
-
-    // 3. Check if data is valid
-    if (!foundDestination || !foundPackage || !date) {
-      // If params are invalid (e.g., "undefined"), redirect to home
-      router.push('/');
+    // 2. Check if URL params are present
+    if (!destinationId || !packageId || !date) {
+      router.push('/'); // Invalid link, go home
       return;
     }
 
-    // 4. If data is valid, check if user is logged in
+    // 3. Check if user is logged in
     if (!user) {
       // User is not logged in. Save intent and redirect to auth.
       setPendingBooking({
@@ -58,12 +55,35 @@ const RegistrationPage = () => {
       return;
     }
 
-    // 5. If we get here: router is ready, data is valid, user is logged in.
-    // Set state to render the page.
-    setDestination(foundDestination);
-    setTravelPackage(foundPackage);
+    // 4. User is logged in AND params are present. Fetch the data.
+    const fetchDestinationData = async () => {
+      const { data, error } = await supabase
+        .from('destinations')
+        .select('data') // Get the JSONB data
+        .eq('id', destinationId)
+        .single();
 
-  }, [router.isReady, user, destinationId, packageId, date, router, setPendingBooking]);
+      if (error || !data) {
+        console.error("Failed to fetch destination data:", error);
+        router.push('/'); // Data not found, redirect home
+        return;
+      }
+
+      const destData: Destination = data.data;
+      const foundPackage = destData.packages.find(p => p.id === packageId);
+
+      if (foundPackage) {
+        setDestination(destData);
+        setTravelPackage(foundPackage);
+      } else {
+        // Destination found, but package ID is invalid
+        router.push('/');
+      }
+    };
+
+    fetchDestinationData();
+
+  }, [router.isReady, user, authLoading, destinationId, packageId, date, router, setPendingBooking]);
 
 
   useEffect(() => {
@@ -78,17 +98,13 @@ const RegistrationPage = () => {
     setFormData(updatedFormData);
   };
   
-  // Updated to save to Supabase
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
-
+    setError(null); 
     if (!agreedToTerms) {
       setError("Please accept the terms and conditions to proceed.");
       return;
     }
-
-    // Double-check for user, just in case
     if (!user || !destination || !travelPackage) {
         setError("Your session has expired or the trip is invalid. Please refresh.");
         return;
@@ -97,28 +113,19 @@ const RegistrationPage = () => {
     setIsLoading(true);
 
     try {
-        // Prepare data for Supabase 'bookings' table
         const bookingData = {
             user_id: user.id,
             destination_id: destination.id,
             package_id: travelPackage.id,
             selected_date: date as string,
             participant_count: participants,
-            participants_data: formData // Save the array as JSON
+            participants_data: formData
         };
-
-        // Insert into the table
         const { error: insertError } = await supabase
             .from('bookings')
             .insert(bookingData);
-        
-        if (insertError) {
-            throw insertError; // This will be caught by the catch block
-        }
-
-        // Success!
+        if (insertError) throw insertError;
         setIsSubmitted(true);
-
     } catch (error: any) {
         console.error("Error saving booking:", error);
         setError(`Failed to save booking: ${error.message}`);
@@ -127,8 +134,8 @@ const RegistrationPage = () => {
     }
   };
 
-  // This is the new loading state. It handles router readiness AND data validation.
-  if (!destination || !travelPackage || !user) {
+  // This is the loading state
+  if (authLoading || !router.isReady || !destination || !travelPackage) {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />
@@ -140,7 +147,6 @@ const RegistrationPage = () => {
     );
   }
   
-  // This is the success page after submission
   if (isSubmitted) {
     return (
        <div className="flex flex-col min-h-screen">
@@ -163,7 +169,6 @@ const RegistrationPage = () => {
     )
   }
 
-  // This is the main registration form
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 ">
       <Head>

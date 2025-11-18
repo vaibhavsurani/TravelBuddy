@@ -3,19 +3,27 @@ import Head from 'next/head';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DestinationCard from '@/components/DestinationCard';
-import { destinations, Destination } from '@/data/destinations';
+import { Destination } from '@/data/destinations';
 import { Search } from 'lucide-react';
+import { GetStaticProps, NextPage } from 'next';
+import { supabase } from '@/lib/supabaseClient';
 
-// Get unique categories for the filter buttons, including an "All" option.
-const categories = ['All', ...Array.from(new Set(destinations.map(d => d.category)))];
+interface AllDestinationsPageProps {
+  destinations: Destination[];
+}
 
-const AllDestinationsPage = () => {
+const AllDestinationsPage: NextPage<AllDestinationsPageProps> = ({ destinations }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>(destinations);
+  // Use destinations from props for initial state, add fallback for safety
+  const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>(destinations || []);
+
+  // --- FIX: Moved this line from outside to inside the component ---
+  // We also add (destinations || []) to prevent errors if the prop is empty
+  const categories = ['All', ...Array.from(new Set((destinations || []).map(d => d.category)))];
 
   useEffect(() => {
-    let results = destinations;
+    let results = destinations || []; // Use prop
 
     // Filter by the selected category first
     if (selectedCategory !== 'All') {
@@ -30,10 +38,9 @@ const AllDestinationsPage = () => {
     }
 
     setFilteredDestinations(results);
-  }, [searchTerm, selectedCategory]); // Re-run the effect when search or category changes
+  }, [searchTerm, selectedCategory, destinations]); // 'destinations' is now a prop
 
   return (
-    // CHANGED: Main background color to match the theme.
     <div className="flex flex-col min-h-screen bg-[#f7f5f2]">
       <Head>
         <title>All Destinations - TravelBuddy</title>
@@ -56,7 +63,7 @@ const AllDestinationsPage = () => {
                 <input
                   type="text"
                   placeholder="Search for a destination..."
-            
+                
                   className="w-full px-5 py-3 pr-12 text-lg text-gray-600 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#C2461C]"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -70,14 +77,13 @@ const AllDestinationsPage = () => {
         </section>
 
         {/* --- 2. Main Content Section (Filters and Cards) --- */}
-        <section className="container mx-auto -mt-3 pb-12 px-6 max-w-6xl">
+        <section className="container mx-auto -mt-7 pb-8 px-6 max-w-6xl">
           {/* Category Filter Buttons */}
-          <div className="flex flex-wrap gap-3 mb-12">
+          <div className="flex flex-wrap gap-3 mb-6">
             {categories.map(category => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                // CHANGED: Button colors for selected and hover states to match the theme.
                 className={`px-6 py-2 font-semibold rounded-full transition-colors duration-300 ${
                   selectedCategory === category
                     ? 'bg-[#C2461C] text-white shadow-md'
@@ -108,6 +114,27 @@ const AllDestinationsPage = () => {
       <Footer />
     </div>
   );
+};
+
+// This function fetches your data from Supabase
+export const getStaticProps: GetStaticProps = async () => {
+  const { data, error } = await supabase
+    .from('destinations')
+    .select('data'); 
+
+  if (error || !data) {
+    console.error('Error fetching destinations:', error.message);
+    return { props: { destinations: [] } };
+  }
+
+  const destinations: Destination[] = data.map((item: any) => item.data);
+
+  return {
+    props: {
+      destinations,
+    },
+    revalidate: 60,
+  };
 };
 
 export default AllDestinationsPage;

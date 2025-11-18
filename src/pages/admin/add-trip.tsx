@@ -515,14 +515,19 @@ const AdminAddTrip = () => {
         <title>Add New Trip</title>
       </Head>
       <Header />
-      <div className="bg-[#C2461C] py-6 h-[60vh] flex items-center -top-15 relative">
-          <div className="max-w-6xl container mx-auto px-6">
-              <h1 className="text-3xl font-semibold text-white">Add New Trip</h1>
-          </div>
+      <div className="h-[65vh] bg-[url('/images/home1.jpg')] w-full bg-cover -top-15 relative bg-center flex flex-col justify-center items-center text-white px-4">
+        <div className="max-w-6xl w-full px-6">
+          <h1 className="text-4xl font-bold text-[#C2461C]">
+            Add New Trip
+          </h1>
+          <p className="mt-4 text-lg text-white">
+            Create and manage exciting travel experiences for your users.
+          </p>
+        </div>
       </div>
       <main className="container max-w-6xl mx-auto px-6 -mt-7 pb-6 flex-grow">
         <h1 className="text-3xl font-bold text-[#C2461C] mb-8">
-          Add New Trip
+          Create a New Trip 
         </h1>
         <form onSubmit={handleSubmit} className="space-y-0">
           <fieldset className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200 space-y-6 mb-8">

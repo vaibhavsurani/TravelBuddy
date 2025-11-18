@@ -139,6 +139,13 @@ const RegistrationPage = () => {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />
+        <div className="h-[65vh] bg-[url('/images/home1.jpg')] w-full bg-cover -top-15 relative bg-center flex flex-col justify-center items-center text-white px-4">
+          <div className="max-w-6xl w-full px-6">
+            <h1 className="text-4xl font-bold text-[#C2461C]">
+              Registration
+            </h1>
+          </div>
+        </div>
         <main className="flex-grow flex items-center justify-center">
             <p>Loading booking details...</p>
         </main>
@@ -151,9 +158,11 @@ const RegistrationPage = () => {
     return (
        <div className="flex flex-col min-h-screen">
         <Header />
-        <div className="bg-[#C2461C] py-6 h-[60vh] flex items-center -top-15 relative">
-          <div className="max-w-6xl container mx-auto px-6">
-              <h1 className="text-3xl font-semibold text-white">Registration</h1>
+        <div className="h-[65vh] bg-[url('/images/home1.jpg')] w-full bg-cover -top-15 relative bg-center flex flex-col justify-center items-center text-white px-4">
+          <div className="max-w-6xl w-full px-6">
+            <h1 className="text-4xl font-bold text-[#C2461C]">
+              Registration
+            </h1>
           </div>
         </div>
         <main className="flex-grow container mx-auto px-6 -mt-7 pb-12 text-center flex flex-col items-center justify-center">
@@ -177,13 +186,15 @@ const RegistrationPage = () => {
       <Header />
       
       {/* Orange Header Bar */}
-      <div className="bg-[#C2461C] py-6 h-[60vh] flex items-center -top-15 relative">
-          <div className="max-w-6xl container mx-auto px-6">
-              <h1 className="text-3xl font-semibold text-white">Registration</h1>
-          </div>
+      <div className="h-[65vh] bg-[url('/images/home1.jpg')] w-full bg-cover -top-15 relative bg-center flex flex-col justify-center items-center text-white px-4">
+        <div className="max-w-6xl w-full px-6">
+          <h1 className="text-4xl font-bold text-[#C2461C]">
+            Registration
+          </h1>
+        </div>
       </div>
 
-      <main className="flex-grow container mx-auto px-6 pb-12">
+      <main className="flex-grow container mx-auto px-6 -mt-5 pb-12">
         <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
             
             {/* Booking Summary Section */}
@@ -198,23 +209,55 @@ const RegistrationPage = () => {
                 
                 {/* Participant Selection */}
                 <div className="mb-8">
-                    <h3 className="text-sm font-medium text-gray-700 mb-3">Select Participants</h3>
-                    <div className="flex gap-2">
-                        {[1, 2, 3, 4, 5, 6].map(num => (
-                            <button
-                                key={num}
-                                type="button"
-                                onClick={() => setParticipants(num)}
-                                className={`w-10 h-10 rounded-md font-semibold text-lg transition-colors border ${
-                                    participants === num 
-                                    ? 'bg-[#C2461C] text-white border-[#C2461C]' 
-                                    : 'bg-white text-gray-700 border-gray-300 hover:border-orange-400'
-                                }`}
-                            >
-                                {num}
-                            </button>
-                        ))}
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">Select Participants</h3>
+                  <div className="flex flex-wrap items-center gap-2">
+                    
+                    {/* This now creates buttons for 1-6 (default)
+                      or up to 12 if the user clicks the plus button.
+                    */}
+                    {Array.from({ length: Math.min(12, Math.max(6, participants)) }, (_, i) => i + 1).map(num => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => setParticipants(num)}
+                        className={`w-10 h-10 rounded-md font-semibold text-lg transition-colors border ${
+                          participants === num 
+                          ? 'bg-[#C2461C] text-white border-[#C2461C]' 
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-orange-400'
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    ))}
+                    
+                    {/* This is the "Plus" button.
+                      It will only show if the participant count is LESS than 12.
+                    */}
+                    {participants < 12 && (
+                      <button
+                        key="plus"
+                        type="button"
+                        onClick={() => setParticipants(prev => prev + 1)}
+                        className="w-10 h-10 rounded-md font-semibold text-lg transition-colors border bg-gray-200 text-gray-700 border-gray-300 hover:bg-orange-400 hover:text-white"
+                        aria-label="Add one participant"
+                      >
+                        +
+                      </button>
+                    )}
+                  </div>
+
+                  {/* This is the new "Contact Us" message.
+                    It will only appear when the participant count is 12 or more.
+                  */}
+                  {participants >= 12 && (
+                    <div className="mt-4 p-3 bg-[#C2461C]/5 border border-[#C2461C]/50 text-[#C2461C] rounded-md text-sm">
+                      You've reached the maximum of 12 participants for online booking. For larger groups, please 
+                      <a href="/contact" className="font-semibold underline hover:text-[#C2461C] ml-1">
+                        contact us
+                      </a>
+                      &nbsp;directly.
                     </div>
+                  )}
                 </div>
 
                 {/* Participant Forms */}
